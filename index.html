@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Protótipo Seu Estilo Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@300..600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#FAF8F5; --surface:#FFFFFF; --ink:#1F1A17; --muted:#716A63; --line:#E5DFD8; --soft:#F0EBE5;
+  --accent:#4A2C20;
+  --accent-soft:color-mix(in srgb, var(--accent) 10%, #FFFFFF);
+  --ok:#2E7447; --warn:#94560F; --sale:#A0302F;
+  --proto:#1F1A17; --proto-ink:#EFEAE4;
+  --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --sans:"Jost","Futura","Avenir Next","Helvetica Neue",Arial,sans-serif;
+  --gut:clamp(16px,4vw,40px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+img{max-width:100%}
+[hidden]{display:none!important}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:500}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:var(--gut)}
+.num{font-variant-numeric:tabular-nums}
+
+/* prototype bar */
+.proto{background:var(--proto);color:var(--proto-ink);font-size:12.5px}
+.proto-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding-block:10px}
+.proto-tag b{font-weight:600;letter-spacing:.04em}
+.proto-tag span{color:#ADA69E}
+.proto-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pbtn{border:1px solid #5A534D;padding:6px 12px;border-radius:999px;white-space:nowrap}
+.pbtn:hover{border-color:var(--proto-ink)}
+.pbtn[aria-pressed="true"]{background:var(--proto-ink);color:var(--proto)}
+.sw{display:flex;gap:6px;align-items:center;margin-left:4px}
+.sw button{width:20px;height:20px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px #5A534D}
+.sw button[aria-checked="true"]{border-color:var(--proto);box-shadow:0 0 0 2px var(--proto-ink)}
+
+/* announcement */
+.ann{background:var(--accent);color:#fff;text-align:center;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;padding-block:9px}
+.ann p{transition:opacity .35s}
+
+/* header */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.hdr-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:80px}
+.hdr-r{display:flex;justify-content:flex-end;gap:4px}
+.ib{width:42px;height:42px;display:grid;place-items:center;position:relative}
+.ib svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:1.5}
+.cnt{position:absolute;top:4px;right:2px;min-width:18px;height:18px;padding-inline:4px;border-radius:9px;background:var(--accent);color:#fff;font-size:10.5px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.logo{display:block;line-height:0}
+.logo img{height:68px;width:auto;mix-blend-mode:multiply}
+.search{border-top:1px solid var(--line);padding-block:10px;background:var(--surface)}
+.search input{width:100%;border:1px solid var(--line);background:var(--paper);padding:11px 14px;border-radius:0}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#fff;padding:14px 24px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;border:1px solid var(--accent)}
+.btn:hover{filter:brightness(1.15)}
+.btn[disabled]{background:var(--line);border-color:var(--line);color:var(--muted);cursor:not-allowed;filter:none}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn.block{width:100%}
+.lnk{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid currentColor;padding-bottom:2px}
+.eyebrow{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+/* hero */
+.hero{padding-block:22px 0}
+.hero-img{display:block;width:100%;height:auto;aspect-ratio:2.43/1;object-fit:cover;background:var(--soft)}
+.props{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:14px}
+@media(min-width:760px){.props{grid-template-columns:repeat(4,1fr)}}
+.props p{background:var(--surface);padding:14px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+
+/* sections */
+.sec{padding-block:40px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
+.sec h2,.how h2{font-family:var(--display);font-size:clamp(28px,4vw,40px);font-weight:500}
+.sec h2 em{font-style:italic;color:var(--accent);font-weight:400}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(160px,44vw,250px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-inline:max(var(--gut),calc((100% - 1180px)/2 + var(--gut)));padding-bottom:8px;scrollbar-width:thin}
+.rail>*{scroll-snap-align:start}
+
+/* how */
+.how{background:var(--soft);padding-block:48px;margin-block:12px}
+.steps{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:22px;counter-reset:s}
+@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr);gap:40px}}
+.steps li{counter-increment:s;display:grid;gap:6px;border-top:1px solid var(--ink);padding-top:16px}
+.steps li::before{content:"Passo " counter(s);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.steps b{font-weight:500;font-size:17px}
+.steps span{color:var(--muted);font-weight:300}
+
+/* catalog */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:26px;scrollbar-width:none}
+.tab{white-space:nowrap;padding:8px 16px;border:1px solid var(--line);font-size:13px;background:var(--surface)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 14px}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 20px}}
+@media(min-width:1040px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.empty{color:var(--muted);padding-block:30px}
+
+/* card */
+.card{display:grid;gap:12px;text-decoration:none;color:var(--ink);align-content:start}
+.ph{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--soft);max-width:100%}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .45s ease, transform .6s ease}
+.ph img.b{opacity:0}
+.card:hover .ph img.b{opacity:1}
+.card:hover .ph img{transform:scale(1.02)}
+.ph.sold img{filter:grayscale(.6);opacity:.7}
+.bdgs{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;z-index:1}
+.bdg{background:var(--surface);color:var(--ink);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 8px}
+.bdg.sale{background:var(--sale);color:#fff}
+.bdg.dark{background:var(--ink);color:var(--paper)}
+.card-b{display:grid;gap:3px}
+.ref{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.card h3{font-size:14px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.price{font-size:15px;font-variant-numeric:tabular-nums}
+.price b{font-weight:500}
+.price span{color:var(--muted);font-size:12.5px}
+.price s{color:var(--muted);font-size:13px;margin-right:4px}
+.price.sale b{color:var(--sale)}
+.tier{font-size:12.5px;color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.price.lock{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);letter-spacing:.06em;margin-top:4px}
+.dots{display:flex;gap:4px;align-items:center}
+.dots i,.dot{display:inline-block;width:11px;height:11px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.16);flex:none}
+
+/* footer */
+.ftr{border-top:1px solid var(--line);margin-top:48px;padding-block:40px 32px;font-size:13.5px;color:var(--muted);background:var(--surface)}
+.ftr-g{display:grid;gap:24px}
+@media(min-width:760px){.ftr-g{grid-template-columns:1.3fr 1fr 1fr 1fr}}
+.ftr h4{margin:0 0 8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:500}
+.ftr-b{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);font-size:12px}
+
+/* product */
+.pd{padding-block:18px 40px}
+.back{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-block:10px;margin-bottom:10px}
+.pd-grid{display:grid;gap:28px}
+@media(min-width:880px){.pd-grid{grid-template-columns:1fr 1fr;gap:56px;align-items:start}.gal{position:sticky;top:calc(env(safe-area-inset-top,0px) + 88px)}}
+.gal-main{aspect-ratio:3/4;background:var(--soft);overflow:hidden;max-width:100%}
+.gal-main img{display:block;width:100%;height:100%;object-fit:cover}
+.gal-th{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.th{width:64px;aspect-ratio:3/4;overflow:hidden;opacity:.55;border:1px solid transparent;background:var(--soft)}
+.th img{display:block;width:100%;height:100%;object-fit:cover}
+.th.on{opacity:1;border-color:var(--ink)}
+.info{display:grid;gap:22px;align-content:start}
+.pd-t{font-family:var(--display);font-size:clamp(34px,5vw,50px);line-height:1.02;font-weight:500}
+.desc{color:var(--muted);font-weight:300;max-width:52ch}
+.lbl{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));border:1px solid var(--line);background:var(--surface)}
+.tiers div{padding:12px 14px;display:grid;gap:2px;border-right:1px solid var(--line)}
+.tiers div:last-child{border-right:0}
+.tiers small{font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+.tiers b{font-size:19px;font-weight:500;font-variant-numeric:tabular-nums}
+.tiers s{font-size:13px;color:var(--muted)}
+.tiers .on{background:var(--accent-soft);box-shadow:inset 0 -2px 0 var(--accent)}
+.tiers .on small{color:var(--accent)}
+.lockbox{border:1px dashed var(--muted);padding:16px;display:grid;gap:10px;background:var(--surface)}
+.lockbox p{color:var(--muted);font-size:14px}
+.grade-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.gwrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
+.grade{border-collapse:collapse;width:100%;font-size:14px}
+.grade th,.grade td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+.grade tr:last-child th,.grade tr:last-child td{border-bottom:0}
+.grade thead th{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--soft)}
+.grade thead th:last-child,.grade td:last-child{text-align:right}
+.grade tbody th{font-weight:400;white-space:nowrap}
+.grade tbody th .dot{margin-right:9px;vertical-align:-1px}
+.stk{font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.low{color:var(--warn);font-weight:500}
+.grade .off th,.grade .off td{color:#A39C95}
+.grade .off .dot{opacity:.45}
+.step{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--paper)}
+.step button{width:36px;height:38px;font-size:18px;line-height:1}
+.step button:disabled{color:#C9C2BB;cursor:not-allowed}
+.step input{width:44px;height:38px;border:0;border-inline:1px solid var(--line);text-align:center;background:var(--surface);font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+.step input::-webkit-outer-spin-button,.step input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.step input:not(:placeholder-shown){font-weight:600}
+.mini{font-size:12px;letter-spacing:.04em;white-space:nowrap;border:1px solid var(--line);padding:7px 10px;color:var(--accent);background:var(--surface)}
+.mini:hover{border-color:var(--accent)}
+.sum{border-top:1px solid var(--ink);padding-top:16px;display:grid;gap:12px}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-variant-numeric:tabular-nums}
+.sum-row b{font-size:22px;font-weight:500}
+.hint{font-size:13px;padding:9px 12px;background:var(--accent-soft);color:var(--accent)}
+.hint.neutral{background:var(--soft);color:var(--muted)}
+.facts{display:grid;gap:6px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(20,16,14,.4);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--paper);z-index:41;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.14)}
+.dr-h{display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 16px) 20px 16px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dr-h h2{font-family:var(--display);font-size:26px}
+.dr-b{flex:1;overflow-y:auto;padding:18px 20px calc(env(safe-area-inset-bottom,0px) + 24px);display:grid;gap:20px;align-content:start}
+.seller{display:flex;gap:10px;align-items:center;font-size:13px;background:var(--surface);border:1px solid var(--line);padding:10px 12px}
+.seller .av{width:30px;height:30px;border-radius:50%;background:#25D366;display:grid;place-items:center;flex:none}
+.seller .av svg{width:17px;height:17px;fill:#fff}
+.items{display:grid;border-top:1px solid var(--line)}
+.it{display:grid;grid-template-columns:60px 1fr;gap:12px;padding-block:14px;border-bottom:1px solid var(--line)}
+.it .ph{width:60px}
+.it h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.it-l{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.it-f{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:6px;font-size:13px;font-variant-numeric:tabular-nums}
+.it-a{display:flex;gap:14px;margin-top:6px;font-size:12px;color:var(--muted)}
+.it-a button{text-decoration:underline}
+.minbar{display:grid;gap:8px;font-size:13px}
+.bar{height:6px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--warn);transition:width .3s}
+.minbar.ok .bar i{background:var(--ok)}
+.minbar .t{color:var(--warn)}
+.minbar.ok .t{color:var(--ok)}
+.fld{display:grid;gap:6px}
+.fld label,.fs legend{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.fld input{border:1px solid var(--line);background:var(--surface);padding:11px 12px;border-radius:0;width:100%}
+.fs{border:0;margin:0;padding:0;display:grid;gap:8px;min-width:0}
+.fs legend{margin-bottom:8px;padding:0}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:var(--surface);padding:11px 12px;cursor:pointer;font-size:14px}
+.opt:has(input:checked){border-color:var(--ink)}
+.opt input{margin-top:3px;accent-color:var(--accent)}
+.opt small{display:block;color:var(--muted);font-size:12px}
+.tot{display:grid;gap:6px;border-top:1px solid var(--ink);padding-top:14px;font-variant-numeric:tabular-nums}
+.err{color:var(--warn);font-size:13px}
+.ok-v{display:grid;gap:16px}
+.ok-v h3{font-family:var(--display);font-size:44px;font-weight:500}
+.bubble{background:#E3F1DA;color:#1E2A1B;padding:14px 16px;border-radius:12px 12px 12px 2px;max-width:100%;overflow-x:auto}
+.bubble pre{margin:0;font-family:var(--sans);font-size:13.5px;white-space:pre-wrap;line-height:1.5}
+.note{font-size:12.5px;color:var(--muted)}
+.pix{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--line);padding:16px}
+@media(max-width:420px){.pix{grid-template-columns:1fr}}
+.pix canvas{width:150px;height:150px;image-rendering:pixelated}
+.pix code{display:block;font-size:11.5px;word-break:break-all;background:var(--soft);padding:8px;margin-block:8px}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(20,16,14,.45)}
+.modal-c{background:var(--paper);width:min(440px,100%);max-height:100%;overflow:auto;padding:24px;display:grid;gap:16px}
+.modal-c h2{font-family:var(--display);font-size:30px}
+
+/* bottom nav */
+.bnav{display:none}
+@media(max-width:759px){
+  .bnav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(env(safe-area-inset-bottom,0px) + 6px)}
+  .bnav button{display:grid;justify-items:center;gap:2px;font-size:11px;color:var(--muted);padding-block:4px;position:relative}
+  .bnav svg{width:21px;height:21px;stroke:var(--ink);fill:none;stroke-width:1.5}
+  .bnav .cnt{top:0;right:calc(50% - 22px)}
+  body{padding-bottom:72px}
+  .logo img{height:60px}
+}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 88px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:11px 18px;font-size:13.5px;z-index:60;max-width:calc(100% - 32px)}
+@media(min-width:760px){.toast{bottom:28px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="proto">
+  <div class="wrap proto-in">
+    <p class="proto-tag"><b>Protótipo navegável</b> · Loja de Atacado IL <span>· catálogo real da Seu Estilo Premium · preço por quantidade é exemplo</span></p>
+    <div class="proto-ctl">
+      <button id="lockBtn" class="pbtn" aria-pressed="false">Preço só para cadastradas</button>
+      <div class="sw" role="radiogroup" aria-label="Cor da marca" id="sw"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ann"><p id="annTxt">Pedido mínimo de R$ 250 para envio</p></div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <div><button class="ib" id="menuBtn" aria-label="Ver catálogo"><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button></div>
+    <a class="logo" href="#" id="logo" aria-label="Seu Estilo Premium, início"><img src="https://cdn.vendizap.com/vendizap-logos/e487c8350034f5213394cfe0b8434acd.webp" alt="Seu Estilo Premium" referrerpolicy="no-referrer"></a>
+    <div class="hdr-r">
+      <button class="ib" id="searchBtn" aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
+      <button class="ib" id="bagBtn" aria-label="Abrir pedido"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="cnt num" id="bagCnt" hidden>0</span></button>
+    </div>
+  </div>
+  <div class="search" id="searchRow" hidden><div class="wrap"><label class="sr" for="q">Buscar produtos</label><input id="q" type="search" placeholder="Buscar por nome ou referência, ex.: Maya ou 035"></div></div>
+</header>
+
+<div id="home">
+  <section class="wrap hero">
+    <img class="hero-img" src="https://cdn.vendizap.com/vendizap-banners/588eab26c93923fb15b4deaf9935ba8f.webp" alt="Peças que vendem. Qualidade que fideliza. Poliamida premium, forro duplo, caimento impecável." referrerpolicy="no-referrer">
+    <div class="props"><p>Poliamida premium</p><p>Forro duplo</p><p>100% forrado</p><p>Mínimo R$ 250</p></div>
+  </section>
+
+  <section class="sec" id="lanc">
+    <div class="wrap sec-h"><h2>Acabou de <em>chegar</em></h2><button class="lnk" data-go="cat">Ver todos</button></div>
+    <div class="rail" id="rail"></div>
+  </section>
+
+  <section class="how">
+    <div class="wrap">
+      <h2>Como comprar no atacado</h2>
+      <ol class="steps">
+        <li><b>Escolha as cores</b><span>Na página do modelo, digite quantas peças quer de cada cor. O estoque aparece na hora.</span></li>
+        <li><b>Passe do pedido mínimo</b><span>R$ 250 no total, somando modelos diferentes. Com 12 peças do mesmo modelo, o preço por peça cai.</span></li>
+        <li><b>Feche pelo WhatsApp ou PIX</b><span>O pedido chega organizado no WhatsApp da loja. Envio por excursão, transportadora ou retirada no box.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="cat">
+    <div class="wrap">
+      <div class="sec-h"><h2>Catálogo</h2><span class="eyebrow num" id="catCount"></span></div>
+      <div class="tabs" role="tablist" aria-label="Categorias" id="tabs"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+</div>
+
+<div id="prod" hidden></div>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-g">
+      <div><h4>Seu Estilo Premium</h4><p style="max-width:34ch">Bodys e vestidos no atacado. Peças 100% forradas na poliamida premium.</p></div>
+      <div><h4>Box</h4><p>Moda Center, Setor Azul, Rua O, Box 63</p><p>Santa Cruz do Capibaribe · PE</p></div>
+      <div><h4>Envio</h4><p>Excursão, transportadora ou retirada no box</p></div>
+      <div><h4>Pagamento</h4><p>PIX, ou dinheiro na retirada</p></div>
+    </div>
+    <p class="ftr-b">Protótipo feito com Loja de Atacado IL. Fotos, nomes, preços e estoque vêm do catálogo atual da loja.</p>
+  </div>
+</footer>
+
+<nav class="bnav" aria-label="Navegação">
+  <button data-home><svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v9H4z"/></svg>Início</button>
+  <button data-go="cat"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg>Catálogo</button>
+  <button id="bSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Buscar</button>
+  <button id="bBag"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Pedido<span class="cnt num" id="bCnt" hidden>0</span></button>
+</nav>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Seu pedido">
+  <div class="dr-h"><h2>Seu pedido</h2><button class="ib" id="closeDr" aria-label="Fechar pedido"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="dr-b" id="drBody"></div>
+</aside>
+
+<div class="modal" id="cad" hidden>
+  <div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="cadT" id="cadC"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const IMG='https://cdn.vendizap.com/vendizap-produtos/', TH='https://cdn.vendizap.com/vendizap-produtos-thumbs/';
+const HEX={'Amarelo Manteiga':'#F1F19C','Azul Claro':'#ADD8E6','Pink':'#FD51A7','Café':'#503113','Preto':'#000000','Marrom':'#964B00','Off White':'#F5F5DC','Verde Claro':'#B2DAB2','Rosa':'#F684BE','Lilás':'#D48FD4','Bordô':'#800000','Marinho':'#07073B','Verde Herança':'#618361','Cereja':'#CA2A2A','Amendoa':'#8D704C'};
+// [nome, REF, categoria, preço, preço promocional, "cor:estoque|...", fotos]
+const RAW=[
+ ['Body Liz','037','Bodys',30,null,'Amarelo Manteiga:4|Azul Claro:6|Pink:4|Café:0','619fc2a4c22b8ba08a9730783f8f099e,c1f338b0eea148c5ed6babbd7f272ac2,f19700c706a63188ea9812f22f21c6dc'],
+ ['Body Carla','032','Bodys',30,null,'Preto:0|Marrom:2|Off White:5|Azul Claro:6|Pink:4','bfddf93cda15eae00022428da9f39df5,3ef3dc11c6318cd4365c2016ee1a0986,08e3f48ec05474ed7682613b31d34c73'],
+ ['Body Bia','030','Bodys',30,null,'Preto:0|Off White:0|Amarelo Manteiga:8|Azul Claro:2|Verde Claro:1|Rosa:6','b5490cffd57a4c667aa9828fb6f8d079,dd4b1bdd230ccba115442d8d54f74dce'],
+ ['Body Ana','029','Bodys',30,27,'Preto:0|Marrom:0|Off White:0|Amarelo Manteiga:0|Lilás:1','dc9b541e3bfb4f256af99bd14d0dcbb5,7b65845b1e48b4cdade36ccf9d7839fe'],
+ ['Body Lara','028','Bodys',30,null,'Marrom:0|Off White:6|Amarelo Manteiga:2|Azul Claro:1|Lilás:4|Pink:1','d528ba448cc26fcbae7e22c69ca248f1,408d15cda9a13b082c65f72f6124f6c7,e2fd256df2794e62a09d66455951c610,df84a48947008bf9829b50eeac601a38'],
+ ['Body Karen','027','Bodys',30,null,'Preto:0|Off White:0|Amarelo Manteiga:7|Azul Claro:4|Lilás:1|Verde Claro:1|Rosa:7','87c9c3c4b50cbaab06227cc4870c4e88,53c9e5940d62fc79406c1bbca7eabfee,8a0c73b8a4dc1272e4ab539f60e494ca,d2294f9553e8ee6ca8a171640a2e544d'],
+ ['Body Lia','026','Bodys',30,null,'Preto:16|Marrom:17|Off White:11|Azul Claro:16|Lilás:0|Pink:17','ab55f0e4d5051a36c046b72782347e0e,864b3cc15595ecc59178f5f740d9fdb9'],
+ ['Body Dara','025','Bodys',30,null,'Preto:17|Marrom:12|Bordô:3|Off White:6|Amarelo Manteiga:12|Azul Claro:9|Lilás:4|Verde Claro:4|Rosa:5|Café:6','e355cad9fed95054349ca3cc63ea5f4e,a1648afdfd953376966e7f64c54753fa,33f39b89bc0cd244566fda7d2999d16f'],
+ ['Body Luma','024','Bodys',30,null,'Preto:0|Marrom:3|Off White:0|Amarelo Manteiga:8|Azul Claro:9|Pink:14|Café:13','292a2afc406beae44bddfb6704af4052,a1bcf780c94df4cdf6ed68c3ed822c3b'],
+ ['Vestido Maysa','038','Vestidos',60,null,'Amarelo Manteiga:1|Azul Claro:2|Pink:6|Café:4','5d3f113a484ccc9a6a2de7544fae5caf,224055324040f0ad0c896552b8f82bfa'],
+ ['Vestido Marvi','036','Vestidos',55,null,'Amarelo Manteiga:1|Azul Claro:3|Pink:7|Café:10','7137f61d12d9f559dbce41b7f0e3f0d8,bc1717ff078af94c030db0316725dfae,24fdaf83afaa9d6c6682e18c7e70947f'],
+ ['Vestido Sabrina','035','Vestidos',60,null,'Amarelo Manteiga:8|Azul Claro:8|Pink:7|Café:11','1b29e48943f4225af349cb4fae0daf35,32f02ab61f944eedb3a5be56ac8ed60a'],
+ ['Vestido Amélia','034','Vestidos',60,null,'Preto:0|Amarelo Manteiga:4|Azul Claro:2|Verde Claro:0|Rosa:5','fcb2ddc0115c6ecc896f7f113b9c10dc,b998d7fefef1c6535ca846ba130d1eeb,343ff5cd716b936b57510fbc195942ba'],
+ ['Vestido Elisa','022','Vestidos',55,null,'Preto:1|Marrom:9|Off White:11|Amarelo Manteiga:8|Azul Claro:3|Lilás:12|Pink:1','639e498c28ec308de16b44b34abfa54b,cc83fa13c8b6e4268669c6619fce207c'],
+ ['Vestido Valéria','20','Vestidos',55,null,'Preto:24|Marrom:5|Marinho:6|Bordô:7|Off White:2','244cbe1113d41ce8e681a2ef7cd33013,914851899142f72a1a33ecca1969d4cd'],
+ ['Vestido Maitê','019','Vestidos',55,null,'Preto:4|Amarelo Manteiga:7|Azul Claro:6|Verde Claro:4|Rosa:8','1aed3e608dac317f33a24b758e3108a9,2f39b3c565ef9569a27600ffc01ef781,966c4c41847623d2e569bf3e2c673443'],
+ ['Vestido Isis','18','Vestidos',55,null,'Preto:0|Marrom:2|Marinho:4|Bordô:5|Off White:18|Amarelo Manteiga:4|Azul Claro:4|Lilás:6|Pink:1|Amendoa:1','373c8a9b98766e1c3d2428ad47bda5b6,aa060cea659592e59daf972d3e29194b,bdb84892da7dca50f21115832eadabb8'],
+ ['Vestido Samanta','17','Vestidos',55,null,'Preto:0|Marrom:6|Bordô:4|Off White:6|Amarelo Manteiga:5|Azul Claro:4|Lilás:7|Pink:2','2e0ad2691a186f21990c9ec62ee76ff4,8b3a8fcfbe2246bf4fe14fad45a2a7f5,bdfa147572b655f666f8138651f89a26'],
+ ['Vestido Carmela','16','Vestidos',55,null,'Preto:12|Marrom:5|Marinho:4|Bordô:1|Off White:0|Amarelo Manteiga:6|Azul Claro:6|Verde Claro:3|Rosa:7','fcccc0586656185d86d62ba762f374a3,ce40ffae9fc41ebeba31c659d44bafb1'],
+ ['Vestido Antonella','14','Vestidos',55,null,'Preto:3|Marrom:22|Marinho:10|Bordô:3|Off White:7|Cereja:10','017c4fc933f09feb93543e16f5592169,06745397c637fadbb45dd80dc1adbd6f,999d3f1e42c7c7e76081607a6a0a1da8,e9c5aaa58af08c39beea6ab5d2e57bd9'],
+ ['Vestido Carol','13','Vestidos',65,null,'Preto:10|Marrom:15|Marinho:0|Bordô:6|Off White:4','3f2b9f660d3c5bcf85dc23f2d86fb9ec,76ba7b9ca48ef12822385fde57199023'],
+ ['Vestido Brenda','12','Vestidos',55,null,'Preto:12|Marrom:13|Marinho:3|Bordô:2|Off White:10|Amarelo Manteiga:2|Azul Claro:4|Lilás:2','7da1b80a608cb5f9001b6368514d7f4a,8f3911f1aec6028feb8c4cfd103de1f2,28b1e2c138ef18a1c4263f148e03a1e8'],
+ ['Vestido Lyra','11','Vestidos',55,null,'Preto:8|Marrom:8|Marinho:13|Amendoa:1|Cereja:10','faf8dbe7f455448d3f86d40c3f7574bc,efa0bf51a3bd481694308278faf57931'],
+ ['Vestido Vênia','010','Vestidos',55,null,'Preto:6|Marrom:7|Off White:8|Azul Claro:9|Pink:5','f2b413715464381dae941af315915649,e6c6552ca40fcce5db6de7a819dcc22e,b5ec3ce9d29ee514e3374cf261406f92'],
+ ['Vestido Rubra','09','Vestidos',55,49.5,'Bordô:1','882fe6664079602b2bc6bfed678ac4aa,b1fcef6a626774d50fba199e13d4f040'],
+ ['Vestido Zara','08','Vestidos',55,49.5,'Preto:0|Marrom:0|Marinho:1|Bordô:0','b1922f34259296d5ffcc1f7fdd486807,0ac1160cdd18cd251c2d8bbbbb171fae'],
+ ['Vestido Alira','07','Vestidos',55,null,'Marrom:0|Marinho:8|Off White:5|Amarelo Manteiga:9|Azul Claro:6|Lilás:6|Pink:7|Café:8','b7bec932e2ee7c56f02e606d1a97697d,e8eed228b712ada10faea22f4a161584'],
+ ['Vestido Maya','06','Vestidos',55,null,'Preto:6|Marrom:4|Marinho:1|Bordô:5|Off White:6|Amarelo Manteiga:10|Azul Claro:10|Lilás:1|Amendoa:0|Verde Claro:7|Rosa:9','a7a06d9ab201e3312664825fbde23284,20888f3448c4e626eb88d32838fc1c43,d31c398e6d95610b11b6ea04ed63230d,a48acd47628eaa49635bb8781287e52a'],
+ ['Vestido Mariah','002','Vestidos',60,null,'Preto:4|Marrom:8|Off White:15|Amarelo Manteiga:0|Azul Claro:9|Lilás:4|Pink:9','c149c4aef5d2f39877ac548004c99fb8,f05843384c3434046ceb9257eff18e63,e5f25d31d3fe5805a3a53e122ed668f4,29b1fb50c7e50e53177ab0f5e285bea3'],
+ ['Vestido Laís','002','Vestidos',55,49.5,'Amarelo Manteiga:0|Azul Claro:0|Pink:2','ca33b9e2d0677b75cfe46a3da7bd24dc,c73b55f70de100a5993669342a2b95fd'],
+ ['Vestido Nina','001','Vestidos',55,null,'Marinho:7|Amarelo Manteiga:4|Lilás:9|Pink:3|Verde Herança:4','4c4cb969d89dd3410ada89f0f4387079,26547b5fe85b41266856abb34904fa05']
+];
+const PRODUCTS=RAW.map(([name,ref,cat,price,promo,cs,im],i)=>({
+  id:'p'+i,name,ref,cat,price,promo,
+  colors:cs.split('|').map(x=>{const [n,s]=x.split(':');return{n,hex:HEX[n]||'#ccc',st:+s}}),
+  imgs:im.split(',').map(h=>h+'.webp'),
+  novo:parseInt(ref,10)>=34,
+  tiers:promo?[[1,promo]]:[[1,price],[12,Math.round(price*90)/100]]
+}));
+const CATS=['Todos','Vestidos','Bodys','Promoções'];
+const ACCENTS=[['Café','#4A2C20'],['Preto','#1F1A17'],['Marinho','#1C2340'],['Rosa','#A3285A']];
+const ANN=['Pedido mínimo de R$ 250 para envio','Peças 100% forradas na poliamida premium','Moda Center · Setor Azul · Rua O · Box 63','12 peças do mesmo modelo: preço menor'];
+const MIN=250, STORE='Seu Estilo Premium';
+
+const $=s=>document.querySelector(s);
+const byId=id=>PRODUCTS.find(p=>p.id===id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const img=(src,alt,cls='',lazy=true)=>`<img ${cls?`class="${cls}"`:''} src="${src}" alt="${esc(alt)}" ${lazy?'loading="lazy"':''} referrerpolicy="no-referrer">`;
+const avail=p=>p.colors.filter(c=>c.st>0);
+
+let cart={}, locked=false, cur=null, draft={}, selImg=0, tab='Todos', q='', orderNo=1042;
+let form={nome:'',zap:'',cid:'',envio:'excursao',exc:'',pag:'whats'}, done=null, triedSubmit=false;
+
+const piecesOf=d=>d?Object.values(d).reduce((a,n)=>a+n,0):0;
+function tierIdx(p,pcs){let i=0;p.tiers.forEach((t,k)=>{if(pcs>=t[0])i=k});return i}
+const unit=(p,pcs)=>p.tiers[tierIdx(p,pcs)][1];
+function totals(){let pcs=0,val=0;for(const id in cart){const p=byId(id),n=piecesOf(cart[id]);pcs+=n;val+=n*unit(p,n)}return{pcs,val}}
+
+function priceHtml(p){
+  if(locked) return `<p class="price lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Preço para revendedoras cadastradas</p>`;
+  if(p.promo) return `<p class="price sale"><s>${brl(p.price)}</s><b>${brl(p.promo)}</b></p><p class="tier" style="color:var(--sale)">Promoção · últimas peças</p>`;
+  return `<p class="price"><b>${brl(p.price)}</b> <span>atacado</span></p><p class="tier">12+ peças: ${brl(p.tiers[1][1])}</p>`;
+}
+function card(p){
+  const sold=!avail(p).length;
+  const b=(p.novo?'<span class="bdg">Chegou</span>':'')+(p.promo?'<span class="bdg sale">−10%</span>':'')+(sold?'<span class="bdg dark">Esgotado</span>':'');
+  const shown=p.colors.slice(0,6);
+  return `<a class="card" href="#" data-open="${p.id}">
+    <div class="ph ${sold?'sold':''}">${img(TH+p.imgs[0],p.name)}${p.imgs[1]?img(TH+p.imgs[1],'', 'b'):''}<div class="bdgs">${b}</div></div>
+    <div class="card-b"><p class="ref">REF ${p.ref}</p><h3>${esc(p.name)}</h3>${priceHtml(p)}
+    <p class="meta"><span class="dots">${shown.map(c=>`<i style="background:${c.hex}" title="${c.n}"></i>`).join('')}${p.colors.length>6?`<span>+${p.colors.length-6}</span>`:''}</span><span>${p.colors.length} ${p.colors.length===1?'cor':'cores'}</span></p></div></a>`;
+}
+
+function renderHome(){
+  $('#rail').innerHTML=PRODUCTS.filter(p=>p.novo).map(card).join('');
+  $('#tabs').innerHTML=CATS.map(c=>`<button class="tab" role="tab" aria-selected="${c===tab}" data-tab="${c}">${c}</button>`).join('');
+  const qq=q.trim().toLowerCase();
+  const list=PRODUCTS.filter(p=>(tab==='Todos'||(tab==='Promoções'?p.promo:p.cat===tab))&&(!qq||p.name.toLowerCase().includes(qq)||p.ref.includes(qq)));
+  $('#grid').innerHTML=list.length?list.map(card).join(''):`<p class="empty">Nenhum modelo encontrado para "${esc(q)}".</p>`;
+  $('#catCount').textContent=`${list.length} ${list.length===1?'modelo':'modelos'}`;
+}
+
+function openProduct(id){
+  cur=id; selImg=0; draft={...(cart[id]||{})};
+  renderProduct();
+  $('#home').hidden=true; $('#prod').hidden=false; window.scrollTo(0,0);
+}
+function goHome(target){
+  $('#prod').hidden=true; $('#home').hidden=false; cur=null;
+  if(target){const el=document.getElementById(target); if(el) el.scrollIntoView({behavior:'smooth'})} else window.scrollTo(0,0);
+}
+function tiersHtml(p,pcs){
+  if(locked) return `<div class="lockbox"><p>Os preços desta loja aparecem só para revendedoras cadastradas. O cadastro é aprovado pela loja.</p><button class="btn ghost" data-cad>Quero me cadastrar</button></div>`;
+  if(p.promo) return `<div><p class="lbl" style="margin-bottom:10px">Preço por peça</p><div class="tiers"><div class="on"><small>Promoção, qualquer quantidade</small><b>${brl(p.promo)} <s>${brl(p.price)}</s></b></div></div></div>`;
+  const i=pcs?tierIdx(p,pcs):-1;
+  return `<div><p class="lbl" style="margin-bottom:10px">Preço por peça</p><div class="tiers" id="tiers">${p.tiers.map((t,k)=>{
+    const next=p.tiers[k+1]; const r=next?`${t[0]} a ${next[0]-1} peças`:`${t[0]} peças ou mais`;
+    return `<div class="${k===i?'on':''}"><small>${r}</small><b>${brl(t[1])}</b></div>`}).join('')}</div></div>`;
+}
+function gradeHtml(p){
+  return `<div class="grade-h"><p class="lbl">Quantas peças de cada cor</p>${avail(p).length>1?'<button class="mini" data-sort>+1 de cada cor</button>':''}</div>
+  <div class="gwrap"><table class="grade"><thead><tr><th scope="col">Cor</th><th scope="col">Estoque</th><th scope="col">Quantidade</th></tr></thead><tbody>${p.colors.map((c,i)=>c.st===0
+    ?`<tr class="off"><th scope="row"><i class="dot" style="background:${c.hex}"></i>${c.n}</th><td class="stk">Esgotado</td><td></td></tr>`
+    :`<tr><th scope="row"><i class="dot" style="background:${c.hex}"></i>${c.n}</th><td class="stk">${c.st<=2?`<span class="low">Últimas ${c.st}</span>`:`${c.st} peças`}</td>
+      <td><span class="step"><button data-dec="${i}" aria-label="Menos uma ${c.n}">−</button><input type="number" min="0" max="${c.st}" inputmode="numeric" id="q-${p.id}-${i}" data-i="${i}" value="${draft[i]||''}" placeholder="0" aria-label="Quantidade na cor ${c.n}"><button data-inc="${i}" aria-label="Mais uma ${c.n}">+</button></span></td></tr>`).join('')}</tbody></table></div>`;
+}
+function renderProduct(){
+  const p=byId(cur), pcs=piecesOf(draft), sold=!avail(p).length;
+  $('#prod').innerHTML=`<div class="wrap pd">
+    <button class="back" data-back>← Voltar ao catálogo</button>
+    <div class="pd-grid">
+      <div class="gal"><div class="gal-main" id="galMain" style="background:var(--soft) url(${TH+p.imgs[selImg]}) center/cover">${img(IMG+p.imgs[selImg],p.name,'',false)}</div>
+        <div class="gal-th">${p.imgs.map((h,k)=>`<button class="th ${k===selImg?'on':''}" data-img="${k}" aria-label="Foto ${k+1}">${img(TH+h,'')}</button>`).join('')}</div></div>
+      <div class="info">
+        <div style="display:grid;gap:10px"><p class="ref">REF ${p.ref} · ${p.cat}${p.novo?' · Lançamento':''}</p><h1 class="pd-t">${esc(p.name)}</h1><p class="desc">Peça 100% forrada na poliamida premium. ${p.colors.length} ${p.colors.length===1?'cor disponível':'cores no catálogo'}, estoque atualizado por cor.</p></div>
+        <div id="tiersBox">${tiersHtml(p,pcs)}</div>
+        ${sold?'<p class="hint neutral">Modelo esgotado em todas as cores. Volta na próxima produção.</p>':`<div style="display:grid;gap:10px">${gradeHtml(p)}</div><div class="sum" id="sum"></div>`}
+        <div class="facts"><p>Pedido mínimo da loja: ${brl(MIN)}, somando modelos diferentes.</p><p>Envio por excursão, transportadora ou retirada no box 63 do Moda Center.</p></div>
+      </div>
+    </div></div>`;
+  if(!sold){syncSteps();updSum()}
+}
+function syncSteps(){
+  const p=byId(cur);
+  p.colors.forEach((c,i)=>{const inp=document.getElementById(`q-${p.id}-${i}`);if(!inp)return;const v=draft[i]||0;
+    inp.value=v||'';const row=inp.parentElement;row.querySelector('[data-dec]').disabled=!v;row.querySelector('[data-inc]').disabled=v>=c.st});
+}
+function setQty(i,v){
+  const p=byId(cur),c=p.colors[i];v=Math.max(0,Math.min(c.st,v|0));
+  if(v) draft[i]=v; else delete draft[i];
+}
+function updSum(){
+  const p=byId(cur), pcs=piecesOf(draft), had=!!cart[cur], box=$('#sum'); if(!box) return;
+  const tb=$('#tiers'); if(tb&&!locked){const i=pcs?tierIdx(p,pcs):-1;[...tb.children].forEach((d,k)=>d.classList.toggle('on',k===i))}
+  if(locked){box.innerHTML=`<div class="sum-row"><span>${pcs} ${pcs===1?'peça escolhida':'peças escolhidas'}</span></div><button class="btn block" data-cad>Cadastre-se para ver preços e comprar</button>`;return}
+  const u=unit(p,pcs), nt=p.tiers.find(t=>t[0]>pcs), stock=p.colors.reduce((a,c)=>a+c.st,0);
+  let hint;
+  if(!pcs) hint=`<p class="hint neutral">Digite as quantidades por cor. O botão “+1 de cada cor” monta um sortido.</p>`;
+  else if(p.promo) hint=`<p class="hint">Preço promocional aplicado.</p>`;
+  else if(nt&&stock>=nt[0]) hint=`<p class="hint">Faltam ${nt[0]-pcs} ${nt[0]-pcs===1?'peça':'peças'} deste modelo, em qualquer cor, para pagar ${brl(nt[1])} por peça.</p>`;
+  else if(nt) hint=`<p class="hint neutral">O estoque atual deste modelo não chega a ${nt[0]} peças.</p>`;
+  else hint=`<p class="hint">Você chegou ao melhor preço deste modelo.</p>`;
+  const label=had?(pcs?'Atualizar pedido':'Tirar do pedido'):'Adicionar ao pedido';
+  box.innerHTML=`<div class="sum-row"><span class="num">${pcs} ${pcs===1?'peça':'peças'} × ${brl(u)}</span><b class="num">${brl(pcs*u)}</b></div>${hint}<button class="btn block" data-add ${(!pcs&&!had)?'disabled':''}>${label}</button>`;
+}
+function commit(){
+  const p=byId(cur), pcs=piecesOf(draft);
+  if(pcs){cart[cur]={...draft}; toast(`${p.name}: ${pcs} ${pcs===1?'peça':'peças'} no pedido`)} else {delete cart[cur]; toast(`${p.name} saiu do pedido`)}
+  updBag(); updSum(); openDrawer();
+}
+function updBag(){
+  const n=totals().pcs;
+  for(const id of ['bagCnt','bCnt']){const el=document.getElementById(id); el.textContent=n; el.hidden=!n}
+}
+const colorLine=(p,d)=>Object.keys(d).map(i=>`${p.colors[i].n} ${d[i]}`).join(' · ');
+
+function renderDrawer(){
+  const b=$('#drBody');
+  if(done){b.innerHTML=doneHtml(); afterDone(); return}
+  const ids=Object.keys(cart);
+  if(!ids.length){b.innerHTML=`<p class="desc">Seu pedido está vazio. Abra um modelo e escolha as quantidades por cor.</p><button class="btn" data-go="cat" data-close>Ver catálogo</button>`;return}
+  const {pcs,val}=totals(), ok=val>=MIN, pct=Math.min(100,val/MIN*100);
+  const items=ids.map(id=>{const p=byId(id),d=cart[id],n=piecesOf(d),u=unit(p,n);
+    return `<div class="it"><div class="ph">${img(TH+p.imgs[0],p.name)}</div><div>
+      <p class="ref">REF ${p.ref}</p><h3>${esc(p.name)}</h3>
+      <p class="it-l">${colorLine(p,d)}</p>
+      <div class="it-f"><span>${n} pç × ${locked?'—':brl(u)}</span><b>${locked?'':brl(n*u)}</b></div>
+      <div class="it-a"><button data-edit="${id}">Editar cores</button><button data-rm="${id}">Remover</button></div></div></div>`}).join('');
+  const envio=[['retirada','Retirada no box','Moda Center, Setor Azul, Rua O, Box 63'],['excursao','Excursão','Informe o nome da excursão'],['transp','Transportadora','A loja cota e passa o valor'],['combinar','A combinar','Resolve tudo pelo WhatsApp']];
+  b.innerHTML=`
+    <div class="seller"><span class="av"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></span><span>O pedido chega organizado no <b>WhatsApp da loja</b>.</span></div>
+    <div class="items">${items}</div>
+    <div class="minbar ${ok?'ok':''}"><div class="bar"><i style="width:${pct}%"></i></div><p class="t num">${ok?`Pedido mínimo de ${brl(MIN)} atingido`:`Faltam ${brl(MIN-val)} para o pedido mínimo de ${brl(MIN)}`}</p></div>
+    <form id="ck" novalidate style="display:grid;gap:16px">
+      <div class="fld"><label for="fNome">Seu nome ou da loja</label><input id="fNome" autocomplete="name" value="${esc(form.nome)}"></div>
+      <div class="fld"><label for="fZap">WhatsApp</label><input id="fZap" inputmode="tel" autocomplete="tel" placeholder="(81) 90000-0000" value="${esc(form.zap)}"></div>
+      <div class="fld"><label for="fCid">Cidade e estado</label><input id="fCid" placeholder="Ex.: Caruaru/PE" value="${esc(form.cid)}"></div>
+      <fieldset class="fs"><legend>Envio</legend>${envio.map(([v,t,s])=>`<label class="opt"><input type="radio" name="envio" value="${v}" ${form.envio===v?'checked':''}><span>${t}<small>${s}</small></span></label>`).join('')}
+        <div class="fld" id="excBox" ${form.envio==='excursao'?'':'hidden'}><label for="fExc">Nome da excursão</label><input id="fExc" value="${esc(form.exc)}" placeholder="Ex.: Excursão do Galego"></div></fieldset>
+      <fieldset class="fs"><legend>Pagamento</legend>
+        <label class="opt"><input type="radio" name="pag" value="whats" ${form.pag==='whats'?'checked':''}><span>Combinar pelo WhatsApp<small>A loja confirma estoque e envia o valor final</small></span></label>
+        <label class="opt"><input type="radio" name="pag" value="pix" ${form.pag==='pix'?'checked':''}><span>PIX agora<small>Gera o QR com o valor do pedido</small></span></label></fieldset>
+      <div class="tot"><div class="sum-row"><span>${pcs} peças</span><b class="num">${locked?'Preço após cadastro':brl(val)}</b></div><p class="note">Frete conforme a forma de envio.</p></div>
+      <p class="err" id="ckErr" ${triedSubmit&&(!form.nome.trim()||!form.zap.trim())?'':'hidden'}>Preencha seu nome e WhatsApp para registrar o pedido.</p>
+      ${locked?`<button type="button" class="btn block" data-cad>Cadastre-se para finalizar</button>`
+        :`<button class="btn block" type="submit" ${ok?'':'disabled'}>${form.pag==='pix'?'Registrar pedido e gerar PIX':'Registrar pedido e abrir WhatsApp'}</button>`}
+    </form>`;
+}
+function msgText(o){
+  const L=[`*Pedido #${o.no} · ${STORE}*`,`Cliente: ${o.nome}${o.cid?' · '+o.cid:''}`,`WhatsApp: ${o.zap}`,''];
+  for(const id in o.cart){const p=byId(id),d=o.cart[id],n=piecesOf(d),u=unit(p,n);
+    L.push(`REF ${p.ref} · ${p.name}`,`   ${colorLine(p,d)}`,`   ${n} pç × ${brl(u)} = ${brl(n*u)}`,'')}
+  const env={retirada:'Retirada no box 63',excursao:'Excursão'+(o.exc?` (${o.exc})`:''),transp:'Transportadora',combinar:'A combinar'}[o.envio];
+  L.push(`*Total: ${o.pcs} peças · ${brl(o.val)}*`,`Envio: ${env}`,`Pagamento: ${o.pag==='pix'?'PIX (gerado no site)':'combinar pelo WhatsApp'}`);
+  return L.join('\n');
+}
+function doneHtml(){
+  const o=done;
+  const pix=o.pag==='pix'?`<div class="pix"><canvas id="qr" width="175" height="175" aria-label="QR de exemplo"></canvas><div><p class="lbl">PIX de ${brl(o.val)}</p><p class="note" style="margin-top:6px">Aponte a câmera do app do banco ou use o copia e cola.</p><code>00020126580014BR.GOV.BCB.PIX0136-EXEMPLO-PEDIDO-${o.no}5204000053039865802BR6304ABCD</code><p class="note">QR de exemplo, não é um pagamento real. Com o Asaas, a baixa é automática. Com PIX manual, a loja confere e marca como pago.</p></div></div>`:'';
+  return `<div class="ok-v"><p class="eyebrow">Pedido registrado</p><h3 class="num">#${o.no}</h3>
+    <p>O pedido já aparece no painel da loja com status <b>${o.pag==='pix'?'Aguardando pagamento':'Novo'}</b>, junto com os dados da cliente. O estoque de cada cor é reservado.</p>
+    ${pix}
+    <p class="lbl">${o.pag==='pix'?'Resumo enviado para a loja':'Mensagem que abre no WhatsApp da loja'}</p>
+    <div class="bubble"><pre id="msg"></pre></div>
+    <p class="note">No sistema real, o WhatsApp abre com essa mensagem pronta. Aqui aparece só a prévia.</p>
+    <button class="btn ghost" id="again">Fazer outro pedido</button></div>`;
+}
+function afterDone(){
+  $('#msg').textContent=msgText(done);
+  const cv=$('#qr'); if(!cv) return;
+  const x=cv.getContext('2d'),n=25,s=cv.width/n; let seed=done.no;
+  const r=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+  x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#1F1A17';
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++) if(r()>.52) x.fillRect(i*s,j*s,s,s);
+  const f=(a,b)=>{x.fillStyle='#fff';x.fillRect((a-1)*s,(b-1)*s,9*s,9*s);x.fillStyle='#1F1A17';x.fillRect(a*s,b*s,7*s,7*s);x.fillStyle='#fff';x.fillRect((a+1)*s,(b+1)*s,5*s,5*s);x.fillStyle='#1F1A17';x.fillRect((a+2)*s,(b+2)*s,3*s,3*s)};
+  f(0,0);f(n-7,0);f(0,n-7);
+}
+function openDrawer(){renderDrawer();$('#drawer').hidden=false;$('#scrim').hidden=false;document.body.style.overflow='hidden';$('#closeDr').focus()}
+function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true;document.body.style.overflow=''}
+
+function openCad(){
+  $('#cadC').innerHTML=`<h2 id="cadT">Cadastro de revendedora</h2><p class="desc">A loja confere seus dados e libera os preços de atacado. Você recebe o aviso pelo WhatsApp.</p>
+    <form id="cadF" style="display:grid;gap:14px" novalidate>
+      <div class="fld"><label for="cN">Nome ou razão social</label><input id="cN"></div>
+      <div class="fld"><label for="cD">CPF ou CNPJ</label><input id="cD" inputmode="numeric"></div>
+      <div class="fld"><label for="cC">Cidade e estado</label><input id="cC"></div>
+      <div class="fld"><label for="cI">Instagram da loja</label><input id="cI" placeholder="@sualoja"></div>
+      <p class="err" id="cadErr" hidden>Preencha nome e CPF ou CNPJ.</p>
+      <button class="btn block" type="submit">Enviar cadastro</button>
+      <button class="lnk" type="button" id="cadX" style="justify-self:center">Cancelar</button></form>`;
+  $('#cad').hidden=false; $('#cN').focus();
+}
+function cadSent(){
+  $('#cadC').innerHTML=`<h2 id="cadT">Cadastro enviado</h2><p class="desc">No sistema real, a loja recebe o cadastro no painel e aprova. Aqui você pode simular a aprovação agora.</p>
+    <button class="btn block" id="cadOk">Simular aprovação e liberar preços</button><button class="lnk" type="button" id="cadX" style="justify-self:center">Fechar</button>`;
+}
+function setLocked(v){locked=v;$('#lockBtn').setAttribute('aria-pressed',v);renderAll()}
+function renderAll(){renderHome(); if(cur) renderProduct(); if(!$('#drawer').hidden) renderDrawer()}
+
+let tt; function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,2400)}
+function toggleSearch(){const r=$('#searchRow');r.hidden=!r.hidden;if(!r.hidden){if(cur)goHome();$('#q').focus()}}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,a'); if(!t) return;
+  if(t.matches('a')) e.preventDefault();
+  if(t.dataset.open){closeDrawer();openProduct(t.dataset.open);return}
+  if('home' in t.dataset||t.id==='logo'){closeDrawer();goHome();return}
+  if(t.dataset.go){if('close' in t.dataset)closeDrawer();goHome(t.dataset.go);return}
+  if('back' in t.dataset){goHome('cat');return}
+  if(t.dataset.tab){tab=t.dataset.tab;renderHome();return}
+  if(t.dataset.img){selImg=+t.dataset.img;const p=byId(cur),g=$('#galMain');g.style.backgroundImage=`url(${TH+p.imgs[selImg]})`;g.innerHTML=img(IMG+p.imgs[selImg],p.name,'',false);document.querySelectorAll('.th').forEach(b=>b.classList.toggle('on',+b.dataset.img===selImg));return}
+  if('sort' in t.dataset){byId(cur).colors.forEach((c,i)=>{if(c.st>0)setQty(i,(draft[i]||0)+1)});syncSteps();updSum();return}
+  if(t.dataset.inc||t.dataset.dec){const i=+(t.dataset.inc||t.dataset.dec);setQty(i,(draft[i]||0)+(t.dataset.inc?1:-1));syncSteps();updSum();return}
+  if('add' in t.dataset){commit();return}
+  if('cad' in t.dataset){openCad();return}
+  if(t.dataset.edit){closeDrawer();openProduct(t.dataset.edit);return}
+  if(t.dataset.rm){delete cart[t.dataset.rm];updBag();renderDrawer();if(cur===t.dataset.rm){draft={};renderProduct()}return}
+  if(t.id==='again'){done=null;triedSubmit=false;closeDrawer();goHome();return}
+  if(t.id==='cadX'){$('#cad').hidden=true;return}
+  if(t.id==='cadOk'){$('#cad').hidden=true;setLocked(false);toast('Cadastro aprovado. Preços liberados.');return}
+  if(t.dataset.accent){document.documentElement.style.setProperty('--accent',t.dataset.accent);document.querySelectorAll('.sw button').forEach(b=>b.setAttribute('aria-checked',b===t));return}
+  if(t.id==='bagBtn'||t.id==='bBag'){openDrawer();return}
+  if(t.id==='closeDr'){closeDrawer();return}
+  if(t.id==='searchBtn'||t.id==='bSearch'){toggleSearch();return}
+  if(t.id==='menuBtn'){goHome('cat');return}
+  if(t.id==='lockBtn'){setLocked(!locked);toast(locked?'Modo preço só para cadastradas ligado':'Preços abertos para todos');return}
+});
+$('#scrim').addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#cad').hidden)$('#cad').hidden=true;else if(!$('#drawer').hidden)closeDrawer()}});
+
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.matches('.step input')){setQty(+t.dataset.i,parseInt(t.value,10)||0);const v=draft[+t.dataset.i]||0;if(t.value!==''&&+t.value!==v)t.value=v||'';const row=t.parentElement;row.querySelector('[data-dec]').disabled=!v;row.querySelector('[data-inc]').disabled=v>=byId(cur).colors[+t.dataset.i].st;updSum();return}
+  if(t.id==='q'){q=t.value;tab='Todos';renderHome();return}
+  const map={fNome:'nome',fZap:'zap',fCid:'cid',fExc:'exc'};
+  if(map[t.id]){form[map[t.id]]=t.value;if(triedSubmit)$('#ckErr').hidden=!!(form.nome.trim()&&form.zap.trim())}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.name==='envio'){form.envio=t.value;$('#excBox').hidden=t.value!=='excursao'}
+  if(t.name==='pag'){form.pag=t.value;renderDrawer()}
+});
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(e.target.id==='cadF'){if(!$('#cN').value.trim()||!$('#cD').value.trim()){$('#cadErr').hidden=false;return}cadSent();return}
+  if(e.target.id==='ck'){
+    triedSubmit=true;
+    if(!form.nome.trim()||!form.zap.trim()){$('#ckErr').hidden=false;return}
+    const {pcs,val}=totals(); if(val<MIN) return;
+    done={no:orderNo++,cart:JSON.parse(JSON.stringify(cart)),pcs,val,...form};
+    cart={}; updBag(); renderDrawer(); $('#drBody').scrollTop=0;
+  }
+});
+
+$('#sw').innerHTML=ACCENTS.map(([n,h],i)=>`<button role="radio" aria-checked="${i===0}" aria-label="${n}" title="${n}" data-accent="${h}" style="background:${h}"></button>`).join('');
+let ai=0; const annP=$('#annTxt');
+setInterval(()=>{annP.style.opacity=0;setTimeout(()=>{ai=(ai+1)%ANN.length;annP.textContent=ANN[ai];annP.style.opacity=1},350)},3800);
+renderHome();
+</script>
+</body>
+</html>
