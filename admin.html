@@ -201,7 +201,7 @@ table.tbl{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}
         <button role="tab" aria-selected="true" data-view="prod">Produtos e estoque</button>
         <button role="tab" aria-selected="false" data-view="imp">Importar planilha</button>
       </nav>
-      <div class="top-r"><a href="index.html" target="_blank" rel="noopener">Ver loja ↗</a><button class="lnk" id="logout">Sair</button></div>
+      <div class="top-r"><a href="index.html" target="_blank" rel="noopener">Ver loja ↗</a><button class="lnk" id="logout" hidden>Sair</button></div>
     </div>
   </header>
 
@@ -321,8 +321,11 @@ const lowColors=p=>p.colors.filter(c=>c.st>0&&c.st<=LOW);
 const pctOf=p=>p.promo?Math.round((1-p.promo/p.price)*100):0;
 
 /* ---------- login ---------- */
-function authed(){try{return sessionStorage.getItem('sep_admin')==='1'}catch(e){return false}}
-function showApp(){ $('#loginV').hidden=authed(); $('#appV').hidden=!authed(); if(authed()) renderList() }
+// Login desligado só para a reunião de apresentação (29/09/2026). Para exigir login de novo,
+// apague esta linha e a que troca #logout, e tire o "hidden" do botão Sair no HTML.
+const SEM_LOGIN_PARA_REUNIAO=true;
+function authed(){if(SEM_LOGIN_PARA_REUNIAO)return true;try{return sessionStorage.getItem('sep_admin')==='1'}catch(e){return false}}
+function showApp(){ $('#loginV').hidden=authed(); $('#appV').hidden=!authed(); $('#logout').hidden=SEM_LOGIN_PARA_REUNIAO; if(authed()) renderList() }
 async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 $('#loginF').addEventListener('submit',async e=>{
   e.preventDefault();
