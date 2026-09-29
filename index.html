@@ -39,9 +39,6 @@ input{font:inherit;color:inherit}
 .proto-tag b{font-weight:600;letter-spacing:.04em}
 .proto-tag span{color:#ADA69E}
 .proto-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-.pbtn{border:1px solid #5A534D;padding:6px 12px;border-radius:999px;white-space:nowrap}
-.pbtn:hover{border-color:var(--proto-ink)}
-.pbtn[aria-pressed="true"]{background:var(--proto-ink);color:var(--proto)}
 .sw{display:flex;gap:6px;align-items:center;margin-left:4px}
 .sw button{width:20px;height:20px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px #5A534D}
 .sw button[aria-checked="true"]{border-color:var(--proto);box-shadow:0 0 0 2px var(--proto-ink)}
@@ -81,19 +78,10 @@ input{font:inherit;color:inherit}
 /* sections */
 .sec{padding-block:40px}
 .sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
-.sec h2,.how h2{font-family:var(--display);font-size:clamp(28px,4vw,40px);font-weight:500}
+.sec h2{font-family:var(--display);font-size:clamp(28px,4vw,40px);font-weight:500}
 .sec h2 em{font-style:italic;color:var(--accent);font-weight:400}
 .rail{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(160px,44vw,250px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-inline:max(var(--gut),calc((100% - 1180px)/2 + var(--gut)));padding-bottom:8px;scrollbar-width:thin}
 .rail>*{scroll-snap-align:start}
-
-/* how */
-.how{background:var(--soft);padding-block:48px;margin-block:12px}
-.steps{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:22px;counter-reset:s}
-@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr);gap:40px}}
-.steps li{counter-increment:s;display:grid;gap:6px;border-top:1px solid var(--ink);padding-top:16px}
-.steps li::before{content:"Passo " counter(s);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
-.steps b{font-weight:500;font-size:17px}
-.steps span{color:var(--muted);font-weight:300}
 
 /* catalog */
 .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:26px;scrollbar-width:none}
@@ -125,7 +113,6 @@ input{font:inherit;color:inherit}
 .price s{color:var(--muted);font-size:13px;margin-right:4px}
 .price.sale b{color:var(--sale)}
 .tier{font-size:12.5px;color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
-.price.lock{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
 .meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);letter-spacing:.06em;margin-top:4px}
 .dots{display:flex;gap:4px;align-items:center}
 .dots i,.dot{display:inline-block;width:11px;height:11px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.16);flex:none}
@@ -160,8 +147,6 @@ input{font:inherit;color:inherit}
 .tiers s{font-size:13px;color:var(--muted)}
 .tiers .on{background:var(--accent-soft);box-shadow:inset 0 -2px 0 var(--accent)}
 .tiers .on small{color:var(--accent)}
-.lockbox{border:1px dashed var(--muted);padding:16px;display:grid;gap:10px;background:var(--surface)}
-.lockbox p{color:var(--muted);font-size:14px}
 .grade-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .gwrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
 .grade{border-collapse:collapse;width:100%;font-size:14px}
@@ -234,10 +219,6 @@ input{font:inherit;color:inherit}
 .pix canvas{width:150px;height:150px;image-rendering:pixelated}
 .pix code{display:block;font-size:11.5px;word-break:break-all;background:var(--soft);padding:8px;margin-block:8px}
 
-/* modal */
-.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(20,16,14,.45)}
-.modal-c{background:var(--paper);width:min(440px,100%);max-height:100%;overflow:auto;padding:24px;display:grid;gap:16px}
-.modal-c h2{font-family:var(--display);font-size:30px}
 
 /* bottom nav */
 .bnav{display:none}
@@ -260,7 +241,6 @@ input{font:inherit;color:inherit}
   <div class="wrap proto-in">
     <p class="proto-tag"><b>Protótipo navegável</b> · Loja de Atacado IL <span>· catálogo real da Seu Estilo Premium · preço por quantidade é exemplo</span></p>
     <div class="proto-ctl">
-      <button id="lockBtn" class="pbtn" aria-pressed="false">Preço só para cadastradas</button>
       <div class="sw" role="radiogroup" aria-label="Cor da marca" id="sw"></div>
     </div>
   </div>
@@ -289,17 +269,6 @@ input{font:inherit;color:inherit}
   <section class="sec" id="lanc">
     <div class="wrap sec-h"><h2>Acabou de <em>chegar</em></h2><button class="lnk" data-go="cat">Ver todos</button></div>
     <div class="rail" id="rail"></div>
-  </section>
-
-  <section class="how">
-    <div class="wrap">
-      <h2>Como comprar no atacado</h2>
-      <ol class="steps">
-        <li><b>Escolha as cores</b><span>Na página do modelo, digite quantas peças quer de cada cor. O estoque aparece na hora.</span></li>
-        <li><b>Passe do pedido mínimo</b><span>R$ 250 no total, somando modelos diferentes. Com 12 peças do mesmo modelo, o preço por peça cai.</span></li>
-        <li><b>Feche pelo WhatsApp ou PIX</b><span>O pedido chega organizado no WhatsApp da loja. Envio por excursão, transportadora ou retirada no box.</span></li>
-      </ol>
-    </div>
   </section>
 
   <section class="sec" id="cat">
@@ -338,9 +307,6 @@ input{font:inherit;color:inherit}
   <div class="dr-b" id="drBody"></div>
 </aside>
 
-<div class="modal" id="cad" hidden>
-  <div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="cadT" id="cadC"></div>
-</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -400,7 +366,7 @@ const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const img=(src,alt,cls='',lazy=true)=>`<img ${cls?`class="${cls}"`:''} src="${src}" alt="${esc(alt)}" ${lazy?'loading="lazy"':''} referrerpolicy="no-referrer">`;
 const avail=p=>p.colors.filter(c=>c.st>0);
 
-let cart={}, locked=false, cur=null, draft={}, selImg=0, tab='Todos', q='', orderNo=1042;
+let cart={}, cur=null, draft={}, selImg=0, tab='Todos', q='', orderNo=1042;
 let form={nome:'',zap:'',cid:'',envio:'excursao',exc:'',pag:'whats'}, done=null, triedSubmit=false;
 
 const piecesOf=d=>d?Object.values(d).reduce((a,n)=>a+n,0):0;
@@ -409,7 +375,6 @@ const unit=(p,pcs)=>p.tiers[tierIdx(p,pcs)][1];
 function totals(){let pcs=0,val=0;for(const id in cart){const p=byId(id),n=piecesOf(cart[id]);pcs+=n;val+=n*unit(p,n)}return{pcs,val}}
 
 function priceHtml(p){
-  if(locked) return `<p class="price lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Preço para revendedoras cadastradas</p>`;
   if(p.promo) return `<p class="price sale"><s>${brl(p.price)}</s><b>${brl(p.promo)}</b></p><p class="tier" style="color:var(--sale)">Promoção · últimas peças</p>`;
   return `<p class="price"><b>${brl(p.price)}</b> <span>atacado</span></p><p class="tier">12+ peças: ${brl(p.tiers[1][1])}</p>`;
 }
@@ -442,7 +407,6 @@ function goHome(target){
   if(target){const el=document.getElementById(target); if(el) el.scrollIntoView({behavior:'smooth'})} else window.scrollTo(0,0);
 }
 function tiersHtml(p,pcs){
-  if(locked) return `<div class="lockbox"><p>Os preços desta loja aparecem só para revendedoras cadastradas. O cadastro é aprovado pela loja.</p><button class="btn ghost" data-cad>Quero me cadastrar</button></div>`;
   if(p.promo) return `<div><p class="lbl" style="margin-bottom:10px">Preço por peça</p><div class="tiers"><div class="on"><small>Promoção, qualquer quantidade</small><b>${brl(p.promo)} <s>${brl(p.price)}</s></b></div></div></div>`;
   const i=pcs?tierIdx(p,pcs):-1;
   return `<div><p class="lbl" style="margin-bottom:10px">Preço por peça</p><div class="tiers" id="tiers">${p.tiers.map((t,k)=>{
@@ -483,8 +447,7 @@ function setQty(i,v){
 }
 function updSum(){
   const p=byId(cur), pcs=piecesOf(draft), had=!!cart[cur], box=$('#sum'); if(!box) return;
-  const tb=$('#tiers'); if(tb&&!locked){const i=pcs?tierIdx(p,pcs):-1;[...tb.children].forEach((d,k)=>d.classList.toggle('on',k===i))}
-  if(locked){box.innerHTML=`<div class="sum-row"><span>${pcs} ${pcs===1?'peça escolhida':'peças escolhidas'}</span></div><button class="btn block" data-cad>Cadastre-se para ver preços e comprar</button>`;return}
+  const tb=$('#tiers'); if(tb){const i=pcs?tierIdx(p,pcs):-1;[...tb.children].forEach((d,k)=>d.classList.toggle('on',k===i))}
   const u=unit(p,pcs), nt=p.tiers.find(t=>t[0]>pcs), stock=p.colors.reduce((a,c)=>a+c.st,0);
   let hint;
   if(!pcs) hint=`<p class="hint neutral">Digite as quantidades por cor. O botão “+1 de cada cor” monta um sortido.</p>`;
@@ -516,7 +479,7 @@ function renderDrawer(){
     return `<div class="it"><div class="ph">${img(TH+p.imgs[0],p.name)}</div><div>
       <p class="ref">REF ${p.ref}</p><h3>${esc(p.name)}</h3>
       <p class="it-l">${colorLine(p,d)}</p>
-      <div class="it-f"><span>${n} pç × ${locked?'—':brl(u)}</span><b>${locked?'':brl(n*u)}</b></div>
+      <div class="it-f"><span>${n} pç × ${brl(u)}</span><b>${brl(n*u)}</b></div>
       <div class="it-a"><button data-edit="${id}">Editar cores</button><button data-rm="${id}">Remover</button></div></div></div>`}).join('');
   const envio=[['retirada','Retirada no box','Moda Center, Setor Azul, Rua O, Box 63'],['excursao','Excursão','Informe o nome da excursão'],['transp','Transportadora','A loja cota e passa o valor'],['combinar','A combinar','Resolve tudo pelo WhatsApp']];
   b.innerHTML=`
@@ -532,10 +495,9 @@ function renderDrawer(){
       <fieldset class="fs"><legend>Pagamento</legend>
         <label class="opt"><input type="radio" name="pag" value="whats" ${form.pag==='whats'?'checked':''}><span>Combinar pelo WhatsApp<small>A loja confirma estoque e envia o valor final</small></span></label>
         <label class="opt"><input type="radio" name="pag" value="pix" ${form.pag==='pix'?'checked':''}><span>PIX agora<small>Gera o QR com o valor do pedido</small></span></label></fieldset>
-      <div class="tot"><div class="sum-row"><span>${pcs} peças</span><b class="num">${locked?'Preço após cadastro':brl(val)}</b></div><p class="note">Frete conforme a forma de envio.</p></div>
+      <div class="tot"><div class="sum-row"><span>${pcs} peças</span><b class="num">${brl(val)}</b></div><p class="note">Frete conforme a forma de envio.</p></div>
       <p class="err" id="ckErr" ${triedSubmit&&(!form.nome.trim()||!form.zap.trim())?'':'hidden'}>Preencha seu nome e WhatsApp para registrar o pedido.</p>
-      ${locked?`<button type="button" class="btn block" data-cad>Cadastre-se para finalizar</button>`
-        :`<button class="btn block" type="submit" ${ok?'':'disabled'}>${form.pag==='pix'?'Registrar pedido e gerar PIX':'Registrar pedido e abrir WhatsApp'}</button>`}
+      <button class="btn block" type="submit" ${ok?'':'disabled'}>${form.pag==='pix'?'Registrar pedido e gerar PIX':'Registrar pedido e abrir WhatsApp'}</button>
     </form>`;
 }
 function msgText(o){
@@ -570,25 +532,6 @@ function afterDone(){
 function openDrawer(){renderDrawer();$('#drawer').hidden=false;$('#scrim').hidden=false;document.body.style.overflow='hidden';$('#closeDr').focus()}
 function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true;document.body.style.overflow=''}
 
-function openCad(){
-  $('#cadC').innerHTML=`<h2 id="cadT">Cadastro de revendedora</h2><p class="desc">A loja confere seus dados e libera os preços de atacado. Você recebe o aviso pelo WhatsApp.</p>
-    <form id="cadF" style="display:grid;gap:14px" novalidate>
-      <div class="fld"><label for="cN">Nome ou razão social</label><input id="cN"></div>
-      <div class="fld"><label for="cD">CPF ou CNPJ</label><input id="cD" inputmode="numeric"></div>
-      <div class="fld"><label for="cC">Cidade e estado</label><input id="cC"></div>
-      <div class="fld"><label for="cI">Instagram da loja</label><input id="cI" placeholder="@sualoja"></div>
-      <p class="err" id="cadErr" hidden>Preencha nome e CPF ou CNPJ.</p>
-      <button class="btn block" type="submit">Enviar cadastro</button>
-      <button class="lnk" type="button" id="cadX" style="justify-self:center">Cancelar</button></form>`;
-  $('#cad').hidden=false; $('#cN').focus();
-}
-function cadSent(){
-  $('#cadC').innerHTML=`<h2 id="cadT">Cadastro enviado</h2><p class="desc">No sistema real, a loja recebe o cadastro no painel e aprova. Aqui você pode simular a aprovação agora.</p>
-    <button class="btn block" id="cadOk">Simular aprovação e liberar preços</button><button class="lnk" type="button" id="cadX" style="justify-self:center">Fechar</button>`;
-}
-function setLocked(v){locked=v;$('#lockBtn').setAttribute('aria-pressed',v);renderAll()}
-function renderAll(){renderHome(); if(cur) renderProduct(); if(!$('#drawer').hidden) renderDrawer()}
-
 let tt; function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,2400)}
 function toggleSearch(){const r=$('#searchRow');r.hidden=!r.hidden;if(!r.hidden){if(cur)goHome();$('#q').focus()}}
 
@@ -604,21 +547,17 @@ document.addEventListener('click',e=>{
   if('sort' in t.dataset){byId(cur).colors.forEach((c,i)=>{if(c.st>0)setQty(i,(draft[i]||0)+1)});syncSteps();updSum();return}
   if(t.dataset.inc||t.dataset.dec){const i=+(t.dataset.inc||t.dataset.dec);setQty(i,(draft[i]||0)+(t.dataset.inc?1:-1));syncSteps();updSum();return}
   if('add' in t.dataset){commit();return}
-  if('cad' in t.dataset){openCad();return}
   if(t.dataset.edit){closeDrawer();openProduct(t.dataset.edit);return}
   if(t.dataset.rm){delete cart[t.dataset.rm];updBag();renderDrawer();if(cur===t.dataset.rm){draft={};renderProduct()}return}
   if(t.id==='again'){done=null;triedSubmit=false;closeDrawer();goHome();return}
-  if(t.id==='cadX'){$('#cad').hidden=true;return}
-  if(t.id==='cadOk'){$('#cad').hidden=true;setLocked(false);toast('Cadastro aprovado. Preços liberados.');return}
   if(t.dataset.accent){document.documentElement.style.setProperty('--accent',t.dataset.accent);document.querySelectorAll('.sw button').forEach(b=>b.setAttribute('aria-checked',b===t));return}
   if(t.id==='bagBtn'||t.id==='bBag'){openDrawer();return}
   if(t.id==='closeDr'){closeDrawer();return}
   if(t.id==='searchBtn'||t.id==='bSearch'){toggleSearch();return}
   if(t.id==='menuBtn'){goHome('cat');return}
-  if(t.id==='lockBtn'){setLocked(!locked);toast(locked?'Modo preço só para cadastradas ligado':'Preços abertos para todos');return}
 });
 $('#scrim').addEventListener('click',closeDrawer);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#cad').hidden)$('#cad').hidden=true;else if(!$('#drawer').hidden)closeDrawer()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#drawer').hidden)closeDrawer()});
 
 document.addEventListener('input',e=>{
   const t=e.target;
@@ -634,7 +573,6 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('submit',e=>{
   e.preventDefault();
-  if(e.target.id==='cadF'){if(!$('#cN').value.trim()||!$('#cD').value.trim()){$('#cadErr').hidden=false;return}cadSent();return}
   if(e.target.id==='ck'){
     triedSubmit=true;
     if(!form.nome.trim()||!form.zap.trim()){$('#ckErr').hidden=false;return}
