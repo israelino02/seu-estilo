@@ -111,9 +111,13 @@ input{font:inherit;color:inherit}
   .s-cta,.slide.dark .s-cta{background:#fff;color:var(--ink);border-color:#fff;padding:12px 18px}
 }
 @media(prefers-reduced-motion:reduce){.slide.on .s-media img{animation:none}}
-.props{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:14px}
-@media(min-width:760px){.props{grid-template-columns:repeat(4,1fr)}}
-.props p{background:var(--surface);padding:14px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+.marquee{overflow:hidden;margin-top:14px;border:1px solid var(--line);background:var(--surface);-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.mq-track{display:flex;width:max-content;animation:mq 34s linear infinite}
+.mq-list{display:flex;flex:none;list-style:none;margin:0;padding:0}
+.mq-list li{display:flex;align-items:center;gap:30px;padding:15px 0 15px 30px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.mq-list li::after{content:"";width:5px;height:5px;background:var(--accent);transform:rotate(45deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.mq-track{animation:none}.marquee{overflow-x:auto}}
 
 /* sections */
 .sec{padding-block:40px}
@@ -151,6 +155,8 @@ input{font:inherit;color:inherit}
 .card:hover .ph img.b{opacity:1}
 .card:hover .ph img{transform:scale(1.02)}
 .ph.sold img{filter:grayscale(.6);opacity:.7}
+.noimg{position:absolute;inset:0;display:grid;place-items:center;background:var(--soft);color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.gal-main,.th{position:relative}
 .bdgs{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;z-index:1}
 .bdg{background:var(--surface);color:var(--ink);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 8px}
 .bdg.sale{background:var(--sale);color:#fff}
@@ -325,7 +331,12 @@ input{font:inherit;color:inherit}
       <button class="sl-nav next" data-slide="1" aria-label="Próximo destaque"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
       <div class="sl-dots" id="dots"></div>
     </div>
-    <div class="props"><p>Poliamida premium</p><p>Forro duplo</p><p>100% forrado</p><p>Mínimo R$ 250</p></div>
+    <div class="marquee" role="region" aria-label="Diferenciais da loja">
+      <div class="mq-track">
+        <ul class="mq-list"><li>Poliamida premium</li><li>Forro duplo</li><li>Peças 100% forradas</li><li>Pedido mínimo R$ 250</li><li>Envio por excursão ou transportadora</li><li>Retirada no Moda Center, Box 63</li></ul>
+        <ul class="mq-list" aria-hidden="true"><li>Poliamida premium</li><li>Forro duplo</li><li>Peças 100% forradas</li><li>Pedido mínimo R$ 250</li><li>Envio por excursão ou transportadora</li><li>Retirada no Moda Center, Box 63</li></ul>
+      </div>
+    </div>
   </section>
 
   <section class="sec" id="lanc">
@@ -403,50 +414,14 @@ input{font:inherit;color:inherit}
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+<script src="dados.js"></script>
+<script src="store.js"></script>
 <script>
-const IMG='https://cdn.vendizap.com/vendizap-produtos/', TH='https://cdn.vendizap.com/vendizap-produtos-thumbs/';
-const HEX={'Amarelo Manteiga':'#F1F19C','Azul Claro':'#ADD8E6','Pink':'#FD51A7','Café':'#503113','Preto':'#000000','Marrom':'#964B00','Off White':'#F5F5DC','Verde Claro':'#B2DAB2','Rosa':'#F684BE','Lilás':'#D48FD4','Bordô':'#800000','Marinho':'#07073B','Verde Herança':'#618361','Cereja':'#CA2A2A','Amendoa':'#8D704C'};
-// [nome, REF, categoria, preço, preço promocional, "cor:estoque|...", fotos]
-const RAW=[
- ['Body Liz','037','Bodys',30,null,'Amarelo Manteiga:4|Azul Claro:6|Pink:4|Café:0','619fc2a4c22b8ba08a9730783f8f099e,c1f338b0eea148c5ed6babbd7f272ac2,f19700c706a63188ea9812f22f21c6dc'],
- ['Body Carla','032','Bodys',30,null,'Preto:0|Marrom:2|Off White:5|Azul Claro:6|Pink:4','bfddf93cda15eae00022428da9f39df5,3ef3dc11c6318cd4365c2016ee1a0986,08e3f48ec05474ed7682613b31d34c73'],
- ['Body Bia','030','Bodys',30,null,'Preto:0|Off White:0|Amarelo Manteiga:8|Azul Claro:2|Verde Claro:1|Rosa:6','b5490cffd57a4c667aa9828fb6f8d079,dd4b1bdd230ccba115442d8d54f74dce'],
- ['Body Ana','029','Bodys',30,27,'Preto:0|Marrom:0|Off White:0|Amarelo Manteiga:0|Lilás:1','dc9b541e3bfb4f256af99bd14d0dcbb5,7b65845b1e48b4cdade36ccf9d7839fe'],
- ['Body Lara','028','Bodys',30,null,'Marrom:0|Off White:6|Amarelo Manteiga:2|Azul Claro:1|Lilás:4|Pink:1','d528ba448cc26fcbae7e22c69ca248f1,408d15cda9a13b082c65f72f6124f6c7,e2fd256df2794e62a09d66455951c610,df84a48947008bf9829b50eeac601a38'],
- ['Body Karen','027','Bodys',30,null,'Preto:0|Off White:0|Amarelo Manteiga:7|Azul Claro:4|Lilás:1|Verde Claro:1|Rosa:7','87c9c3c4b50cbaab06227cc4870c4e88,53c9e5940d62fc79406c1bbca7eabfee,8a0c73b8a4dc1272e4ab539f60e494ca,d2294f9553e8ee6ca8a171640a2e544d'],
- ['Body Lia','026','Bodys',30,null,'Preto:16|Marrom:17|Off White:11|Azul Claro:16|Lilás:0|Pink:17','ab55f0e4d5051a36c046b72782347e0e,864b3cc15595ecc59178f5f740d9fdb9'],
- ['Body Dara','025','Bodys',30,null,'Preto:17|Marrom:12|Bordô:3|Off White:6|Amarelo Manteiga:12|Azul Claro:9|Lilás:4|Verde Claro:4|Rosa:5|Café:6','e355cad9fed95054349ca3cc63ea5f4e,a1648afdfd953376966e7f64c54753fa,33f39b89bc0cd244566fda7d2999d16f'],
- ['Body Luma','024','Bodys',30,null,'Preto:0|Marrom:3|Off White:0|Amarelo Manteiga:8|Azul Claro:9|Pink:14|Café:13','292a2afc406beae44bddfb6704af4052,a1bcf780c94df4cdf6ed68c3ed822c3b'],
- ['Vestido Maysa','038','Vestidos',60,null,'Amarelo Manteiga:1|Azul Claro:2|Pink:6|Café:4','5d3f113a484ccc9a6a2de7544fae5caf,224055324040f0ad0c896552b8f82bfa'],
- ['Vestido Marvi','036','Vestidos',55,null,'Amarelo Manteiga:1|Azul Claro:3|Pink:7|Café:10','7137f61d12d9f559dbce41b7f0e3f0d8,bc1717ff078af94c030db0316725dfae,24fdaf83afaa9d6c6682e18c7e70947f'],
- ['Vestido Sabrina','035','Vestidos',60,null,'Amarelo Manteiga:8|Azul Claro:8|Pink:7|Café:11','1b29e48943f4225af349cb4fae0daf35,32f02ab61f944eedb3a5be56ac8ed60a'],
- ['Vestido Amélia','034','Vestidos',60,null,'Preto:0|Amarelo Manteiga:4|Azul Claro:2|Verde Claro:0|Rosa:5','fcb2ddc0115c6ecc896f7f113b9c10dc,b998d7fefef1c6535ca846ba130d1eeb,343ff5cd716b936b57510fbc195942ba'],
- ['Vestido Elisa','022','Vestidos',55,null,'Preto:1|Marrom:9|Off White:11|Amarelo Manteiga:8|Azul Claro:3|Lilás:12|Pink:1','639e498c28ec308de16b44b34abfa54b,cc83fa13c8b6e4268669c6619fce207c'],
- ['Vestido Valéria','20','Vestidos',55,null,'Preto:24|Marrom:5|Marinho:6|Bordô:7|Off White:2','244cbe1113d41ce8e681a2ef7cd33013,914851899142f72a1a33ecca1969d4cd'],
- ['Vestido Maitê','019','Vestidos',55,null,'Preto:4|Amarelo Manteiga:7|Azul Claro:6|Verde Claro:4|Rosa:8','1aed3e608dac317f33a24b758e3108a9,2f39b3c565ef9569a27600ffc01ef781,966c4c41847623d2e569bf3e2c673443'],
- ['Vestido Isis','18','Vestidos',55,null,'Preto:0|Marrom:2|Marinho:4|Bordô:5|Off White:18|Amarelo Manteiga:4|Azul Claro:4|Lilás:6|Pink:1|Amendoa:1','373c8a9b98766e1c3d2428ad47bda5b6,aa060cea659592e59daf972d3e29194b,bdb84892da7dca50f21115832eadabb8'],
- ['Vestido Samanta','17','Vestidos',55,null,'Preto:0|Marrom:6|Bordô:4|Off White:6|Amarelo Manteiga:5|Azul Claro:4|Lilás:7|Pink:2','2e0ad2691a186f21990c9ec62ee76ff4,8b3a8fcfbe2246bf4fe14fad45a2a7f5,bdfa147572b655f666f8138651f89a26'],
- ['Vestido Carmela','16','Vestidos',55,null,'Preto:12|Marrom:5|Marinho:4|Bordô:1|Off White:0|Amarelo Manteiga:6|Azul Claro:6|Verde Claro:3|Rosa:7','fcccc0586656185d86d62ba762f374a3,ce40ffae9fc41ebeba31c659d44bafb1'],
- ['Vestido Antonella','14','Vestidos',55,null,'Preto:3|Marrom:22|Marinho:10|Bordô:3|Off White:7|Cereja:10','017c4fc933f09feb93543e16f5592169,06745397c637fadbb45dd80dc1adbd6f,999d3f1e42c7c7e76081607a6a0a1da8,e9c5aaa58af08c39beea6ab5d2e57bd9'],
- ['Vestido Carol','13','Vestidos',65,null,'Preto:10|Marrom:15|Marinho:0|Bordô:6|Off White:4','3f2b9f660d3c5bcf85dc23f2d86fb9ec,76ba7b9ca48ef12822385fde57199023'],
- ['Vestido Brenda','12','Vestidos',55,null,'Preto:12|Marrom:13|Marinho:3|Bordô:2|Off White:10|Amarelo Manteiga:2|Azul Claro:4|Lilás:2','7da1b80a608cb5f9001b6368514d7f4a,8f3911f1aec6028feb8c4cfd103de1f2,28b1e2c138ef18a1c4263f148e03a1e8'],
- ['Vestido Lyra','11','Vestidos',55,null,'Preto:8|Marrom:8|Marinho:13|Amendoa:1|Cereja:10','faf8dbe7f455448d3f86d40c3f7574bc,efa0bf51a3bd481694308278faf57931'],
- ['Vestido Vênia','010','Vestidos',55,null,'Preto:6|Marrom:7|Off White:8|Azul Claro:9|Pink:5','f2b413715464381dae941af315915649,e6c6552ca40fcce5db6de7a819dcc22e,b5ec3ce9d29ee514e3374cf261406f92'],
- ['Vestido Rubra','09','Vestidos',55,49.5,'Bordô:1','882fe6664079602b2bc6bfed678ac4aa,b1fcef6a626774d50fba199e13d4f040'],
- ['Vestido Zara','08','Vestidos',55,49.5,'Preto:0|Marrom:0|Marinho:1|Bordô:0','b1922f34259296d5ffcc1f7fdd486807,0ac1160cdd18cd251c2d8bbbbb171fae'],
- ['Vestido Alira','07','Vestidos',55,null,'Marrom:0|Marinho:8|Off White:5|Amarelo Manteiga:9|Azul Claro:6|Lilás:6|Pink:7|Café:8','b7bec932e2ee7c56f02e606d1a97697d,e8eed228b712ada10faea22f4a161584'],
- ['Vestido Maya','06','Vestidos',55,null,'Preto:6|Marrom:4|Marinho:1|Bordô:5|Off White:6|Amarelo Manteiga:10|Azul Claro:10|Lilás:1|Amendoa:0|Verde Claro:7|Rosa:9','a7a06d9ab201e3312664825fbde23284,20888f3448c4e626eb88d32838fc1c43,d31c398e6d95610b11b6ea04ed63230d,a48acd47628eaa49635bb8781287e52a'],
- ['Vestido Mariah','002','Vestidos',60,null,'Preto:4|Marrom:8|Off White:15|Amarelo Manteiga:0|Azul Claro:9|Lilás:4|Pink:9','c149c4aef5d2f39877ac548004c99fb8,f05843384c3434046ceb9257eff18e63,e5f25d31d3fe5805a3a53e122ed668f4,29b1fb50c7e50e53177ab0f5e285bea3'],
- ['Vestido Laís','002','Vestidos',55,49.5,'Amarelo Manteiga:0|Azul Claro:0|Pink:2','ca33b9e2d0677b75cfe46a3da7bd24dc,c73b55f70de100a5993669342a2b95fd'],
- ['Vestido Nina','001','Vestidos',55,null,'Marinho:7|Amarelo Manteiga:4|Lilás:9|Pink:3|Verde Herança:4','4c4cb969d89dd3410ada89f0f4387079,26547b5fe85b41266856abb34904fa05']
-];
-const PRODUCTS=RAW.map(([name,ref,cat,price,promo,cs,im],i)=>({
-  id:'p'+i,name,ref,cat,price,promo,
-  colors:cs.split('|').map(x=>{const [n,s]=x.split(':');return{n,hex:HEX[n]||'#ccc',st:+s}}),
-  imgs:im.split(',').map(h=>h+'.webp'),
-  novo:parseInt(ref,10)>=34
-}));
-const CATS=['Todos','Vestidos','Bodys','Promoções'];
+const TH=Store.thumb, FULL=Store.full;
+let PRODUCTS=[];
+function loadProducts(){PRODUCTS=Store.load().filter(p=>p.active!==false)}
+loadProducts();
+const catList=()=>['Todos',...new Set(PRODUCTS.map(p=>p.cat)),...(PRODUCTS.some(p=>p.promo)?['Promoções']:[])];
 const ACCENTS=[['Café','#4A2C20'],['Preto','#1F1A17'],['Marinho','#1C2340'],['Rosa','#A3285A']];
 const ANN=['Pedido mínimo de R$ 250 para envio','Peças 100% forradas na poliamida premium','Moda Center · Setor Azul · Rua O · Box 63'];
 const MIN=250, STORE='Seu Estilo Premium';
@@ -455,7 +430,7 @@ const $=s=>document.querySelector(s);
 const byId=id=>PRODUCTS.find(p=>p.id===id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const img=(src,alt,cls='',lazy=true)=>`<img ${cls?`class="${cls}"`:''} src="${src}" alt="${esc(alt)}" ${lazy?'loading="lazy"':''} referrerpolicy="no-referrer">`;
+const img=(src,alt,cls='',lazy=true)=>src?`<img ${cls?`class="${cls}"`:''} src="${src}" alt="${esc(alt)}" ${lazy?'loading="lazy"':''} referrerpolicy="no-referrer">`:`<span class="noimg">Sem foto</span>`;
 const avail=p=>p.colors.filter(c=>c.st>0);
 
 let cart={}, cur=null, draft={}, selImg=0, tab='Todos', q='';
@@ -473,16 +448,17 @@ function priceHtml(p){
 }
 function card(p){
   const sold=!avail(p).length;
-  const b=(p.novo?'<span class="bdg">Chegou</span>':'')+(p.promo?'<span class="bdg sale">−10%</span>':'')+(sold?'<span class="bdg dark">Esgotado</span>':'');
+  const b=(p.novo?'<span class="bdg">Chegou</span>':'')+(p.promo?`<span class="bdg sale">−${Math.round((1-p.promo/p.price)*100)}%</span>`:'')+(sold?'<span class="bdg dark">Esgotado</span>':'');
   const shown=p.colors.slice(0,6);
   return `<a class="card" href="#" data-open="${p.id}">
-    <div class="ph ${sold?'sold':''}">${img(TH+p.imgs[0],p.name)}${p.imgs[1]?img(TH+p.imgs[1],'', 'b'):''}<div class="bdgs">${b}</div></div>
+    <div class="ph ${sold?'sold':''}">${img(TH(p.imgs[0]),p.name)}${p.imgs[1]?img(TH(p.imgs[1]),'', 'b'):''}<div class="bdgs">${b}</div></div>
     <div class="card-b"><p class="ref">REF ${p.ref}</p><h3>${esc(p.name)}</h3>${priceHtml(p)}
     <p class="meta"><span class="dots">${shown.map(c=>`<i style="background:${c.hex}" title="${c.n}"></i>`).join('')}${p.colors.length>6?`<span>+${p.colors.length-6}</span>`:''}</span><span>${p.colors.length} ${p.colors.length===1?'cor':'cores'}</span></p></div></a>`;
 }
 
 function renderHome(){
-  $('#tabs').innerHTML=CATS.map(c=>`<button class="tab" role="tab" aria-selected="${c===tab}" data-tab="${c}">${c}</button>`).join('');
+  if(!catList().includes(tab)) tab='Todos';
+  $('#tabs').innerHTML=catList().map(c=>`<button class="tab" role="tab" aria-selected="${c===tab}" data-tab="${c}">${c}</button>`).join('');
   const qq=q.trim().toLowerCase();
   const list=PRODUCTS.filter(p=>(tab==='Todos'||(tab==='Promoções'?p.promo:p.cat===tab))&&(!qq||p.name.toLowerCase().includes(qq)||p.ref.includes(qq)));
   $('#grid').innerHTML=list.length?list.map(card).join(''):`<p class="empty">Nenhum modelo encontrado para "${esc(q)}".</p>`;
@@ -490,6 +466,7 @@ function renderHome(){
 }
 
 function openProduct(id){
+  if(!byId(id)){goHome('cat');return}
   cur=id; selImg=0; draft={...(cart[id]||{})};
   renderProduct();
   $('#home').hidden=true; $('#prod').hidden=false; window.scrollTo(0,0);
@@ -514,8 +491,8 @@ function renderProduct(){
   $('#prod').innerHTML=`<div class="wrap pd">
     <button class="back" data-back>← Voltar ao catálogo</button>
     <div class="pd-grid">
-      <div class="gal"><div class="gal-main" id="galMain" style="background:var(--soft) url(${TH+p.imgs[selImg]}) center/cover">${img(IMG+p.imgs[selImg],p.name,'',false)}</div>
-        <div class="gal-th">${p.imgs.map((h,k)=>`<button class="th ${k===selImg?'on':''}" data-img="${k}" aria-label="Foto ${k+1}">${img(TH+h,'')}</button>`).join('')}</div></div>
+      <div class="gal"><div class="gal-main" id="galMain" style="background:var(--soft) url(${TH(p.imgs[selImg])}) center/cover">${img(FULL(p.imgs[selImg]),p.name,'',false)}</div>
+        <div class="gal-th">${p.imgs.map((h,k)=>`<button class="th ${k===selImg?'on':''}" data-img="${k}" aria-label="Foto ${k+1}">${img(TH(h),'')}</button>`).join('')}</div></div>
       <div class="info">
         <div style="display:grid;gap:10px"><p class="ref">REF ${p.ref} · ${p.cat}${p.novo?' · Lançamento':''}</p><h1 class="pd-t">${esc(p.name)}</h1><p class="desc">Peça 100% forrada na poliamida premium. ${p.colors.length} ${p.colors.length===1?'cor disponível':'cores no catálogo'}, estoque atualizado por cor.</p></div>
         ${priceBox(p)}
@@ -561,7 +538,7 @@ function renderDrawer(){
   if(!ids.length){b.innerHTML=`<p class="desc">Seu pedido está vazio. Abra um modelo e escolha as quantidades por cor.</p><button class="btn" data-go="cat" data-close>Ver catálogo</button>`;return}
   const {pcs,val}=totals(), ok=val>=MIN, pct=Math.min(100,val/MIN*100);
   const items=ids.map(id=>{const p=byId(id),d=cart[id],n=piecesOf(d),u=unit(p);
-    return `<div class="it"><div class="ph">${img(TH+p.imgs[0],p.name)}</div><div>
+    return `<div class="it"><div class="ph">${img(TH(p.imgs[0]),p.name)}</div><div>
       <p class="ref">REF ${p.ref}</p><h3>${esc(p.name)}</h3>
       <p class="it-l">${colorLine(p,d)}</p>
       <div class="it-f"><span>${n} pç × ${brl(u)}</span><b>${brl(n*u)}</b></div>
@@ -620,7 +597,7 @@ const slider=$('#slider'), slidesEl=$('#slides'), dotsEl=$('#dots');
 let slideI=0, slideT=0, swX=null;
 function buildSlides(){
   slidesEl.innerHTML=SLIDES.map((s,i)=>`<div class="slide${s.banner?' banner':''}${s.dark?' dark':''}" ${s.tone?`style="--tone:${s.tone}"`:''} role="group" aria-roledescription="slide" aria-label="${i+1} de ${SLIDES.length}">
-    <div class="s-media">${s.banner?`<img src="${s.banner}" alt="${esc(s.h)}" referrerpolicy="no-referrer">`:s.imgs.map(h=>`<img src="${IMG+h}.webp" alt="" referrerpolicy="no-referrer">`).join('')}</div>
+    <div class="s-media">${s.banner?`<img src="${s.banner}" alt="${esc(s.h)}" referrerpolicy="no-referrer">`:s.imgs.map(h=>`<img src="${FULL(h+'.webp')}" alt="" referrerpolicy="no-referrer">`).join('')}</div>
     <div class="s-txt"><p class="eyebrow">${s.eb}</p><h2>${s.h}</h2><p class="s-p">${s.p}</p><button class="btn s-cta" ${s.act}>${s.cta}</button></div></div>`).join('');
   dotsEl.innerHTML=SLIDES.map((_,i)=>`<button data-dot="${i}" aria-label="Destaque ${i+1}"><i></i></button>`).join('');
   showSlide(0);
@@ -642,6 +619,8 @@ let railSet=0, railStep=0, railStale=false, railW=0, railT=0;
 let drag=false, moved=false, sx=0, sl=0, lastX=0, lastT=0, vel=0, inertia=0;
 function buildRail(){
   const base=PRODUCTS.filter(p=>p.novo);
+  $('#lanc').hidden=!base.length;
+  if(!base.length){rail.innerHTML='';railSet=0;return}
   rail.innerHTML=card(base[0])+card(base[0]);
   railStep=rail.children[1].offsetLeft-rail.children[0].offsetLeft;
   const reps=Math.max(1,Math.ceil(rail.clientWidth/(railStep*base.length)));
@@ -705,7 +684,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.dot){showSlide(+t.dataset.dot);return}
   if(t.dataset.cat){tab=t.dataset.cat;renderHome();goHome('cat');return}
   if(t.dataset.rail){railFix();rail.scrollBy({left:railStep*+t.dataset.rail,behavior:reduceMotion?'auto':'smooth'});return}
-  if(t.dataset.img){selImg=+t.dataset.img;const p=byId(cur),g=$('#galMain');g.style.backgroundImage=`url(${TH+p.imgs[selImg]})`;g.innerHTML=img(IMG+p.imgs[selImg],p.name,'',false);document.querySelectorAll('.th').forEach(b=>b.classList.toggle('on',+b.dataset.img===selImg));return}
+  if(t.dataset.img){selImg=+t.dataset.img;const p=byId(cur),g=$('#galMain');g.style.backgroundImage=`url(${TH(p.imgs[selImg])})`;g.innerHTML=img(FULL(p.imgs[selImg]),p.name,'',false);document.querySelectorAll('.th').forEach(b=>b.classList.toggle('on',+b.dataset.img===selImg));return}
   if('sort' in t.dataset){byId(cur).colors.forEach((c,i)=>{if(c.st>0)setQty(i,(draft[i]||0)+1)});syncSteps();updSum();return}
   if(t.dataset.inc||t.dataset.dec){const i=+(t.dataset.inc||t.dataset.dec);setQty(i,(draft[i]||0)+(t.dataset.inc?1:-1));syncSteps();updSum();return}
   if('add' in t.dataset){commit();return}
@@ -750,6 +729,19 @@ document.addEventListener('submit',e=>{
 $('#sw').innerHTML=ACCENTS.map(([n,h],i)=>`<button role="radio" aria-checked="${i===0}" aria-label="${n}" title="${n}" data-accent="${h}" style="background:${h}"></button>`).join('');
 let ai=0; const annP=$('#annTxt');
 setInterval(()=>{annP.style.opacity=0;setTimeout(()=>{ai=(ai+1)%ANN.length;annP.textContent=ANN[ai];annP.style.opacity=1},350)},3800);
+// Quando o painel salva em outra aba, a loja se atualiza sozinha
+addEventListener('storage',e=>{
+  if(e.key!==Store.key) return;
+  loadProducts();
+  for(const id in cart){
+    const p=byId(id); if(!p){delete cart[id];continue}
+    for(const i in cart[id]){const st=p.colors[i]?p.colors[i].st:0; if(cart[id][i]>st){if(st>0)cart[id][i]=st;else delete cart[id][i]}}
+    if(!piecesOf(cart[id])) delete cart[id];
+  }
+  updBag(); renderHome(); buildRail();
+  if(cur){if(byId(cur)){draft={...(cart[cur]||{})};renderProduct()}else goHome('cat')}
+  if(!$('#drawer').hidden) renderDrawer();
+});
 document.querySelectorAll('[data-wa]').forEach(a=>{a.href=waLink(a.dataset.wa)});
 renderHome();
 buildSlides();

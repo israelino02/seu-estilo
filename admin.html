@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel Seu Estilo Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..600&family=Jost:wght@300..600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#FAF8F5; --surface:#FFFFFF; --ink:#1F1A17; --muted:#716A63; --line:#E5DFD8; --soft:#F0EBE5;
+  --accent:#4A2C20; --accent-soft:#EFE7E3;
+  --ok:#2E7447; --ok-soft:#E4F0E8; --warn:#94560F; --warn-soft:#F7ECDD; --bad:#A0302F; --bad-soft:#F6E3E2;
+  --display:"Bodoni Moda","Didot",Georgia,serif;
+  --sans:"Jost","Futura","Avenir Next","Helvetica Neue",Arial,sans-serif;
+  --gut:clamp(16px,3vw,32px);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.45}
+img{max-width:100%}
+[hidden]{display:none!important}
+h1,h2,h3{margin:0;font-weight:500;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1240px;margin-inline:auto;padding-inline:var(--gut)}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#fff;border:1px solid var(--accent);padding:10px 16px;font-size:13px;font-weight:500;letter-spacing:.04em;white-space:nowrap}
+.btn:hover{filter:brightness(1.15)}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink);filter:none}
+.btn.sm{padding:6px 10px;font-size:12.5px}
+.btn.danger{background:var(--bad);border-color:var(--bad)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:none}
+.lnk{color:var(--accent);text-decoration:underline;text-underline-offset:3px;font-size:13px}
+.lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--muted)}
+.muted{color:var(--muted)}
+
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.login-c{width:min(400px,100%);background:var(--surface);border:1px solid var(--line);padding:32px 28px;display:grid;gap:16px}
+.login-c img{height:70px;justify-self:center;mix-blend-mode:multiply}
+.login-c h1{font-family:var(--display);font-size:28px;text-align:center}
+.fld{display:grid;gap:6px}
+.fld label{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+.fld input,.fld select{border:1px solid var(--line);background:var(--surface);padding:10px 12px;width:100%;border-radius:0}
+.fld small{color:var(--muted);font-size:12px}
+.err{color:var(--bad);font-size:13px}
+.note{font-size:12.5px;color:var(--muted)}
+
+/* top */
+.top{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top-in{display:flex;align-items:center;gap:20px;min-height:68px;flex-wrap:wrap;padding-block:6px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{height:50px;mix-blend-mode:multiply}
+.brand span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--line);padding:3px 8px}
+.nav{display:flex;gap:4px;flex:1}
+.nav button{padding:8px 14px;font-size:13.5px;border-bottom:2px solid transparent}
+.nav button[aria-selected="true"]{border-bottom-color:var(--accent);font-weight:500}
+.top-r{display:flex;gap:14px;align-items:center;font-size:13px}
+.top-r a{color:var(--ink)}
+@media(max-width:700px){.nav{order:3;flex-basis:100%}.top-r{margin-left:auto}}
+
+main{padding-block:26px 60px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.head h1{font-family:var(--display);font-size:clamp(26px,3vw,34px)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:20px}
+@media(min-width:800px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{background:var(--surface);border:1px solid var(--line);padding:14px 16px;display:grid;gap:4px;text-align:left}
+.stat b{font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat.warn{border-color:#E6CBA6;background:var(--warn-soft)}
+.stat.warn b{color:var(--warn)}
+.stat.bad{border-color:#E8C3C1;background:var(--bad-soft)}
+.stat.bad b{color:var(--bad)}
+button.stat:hover{border-color:var(--ink)}
+
+/* toolbar */
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.tools input,.tools select{border:1px solid var(--line);background:var(--surface);padding:9px 12px;border-radius:0}
+.tools input{flex:1;min-width:200px}
+.tools .sp{flex:1}
+
+/* list */
+.plist{background:var(--surface);border:1px solid var(--line)}
+.prow{display:grid;grid-template-columns:56px minmax(0,1.4fr) 120px minmax(0,2.2fr) 56px 96px 226px;gap:14px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:0}
+.prow.hd{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:var(--soft);padding-block:9px}
+.pth{width:56px;aspect-ratio:3/4;background:var(--soft);overflow:hidden;display:grid;place-items:center;font-size:9px;color:var(--muted);text-align:center}
+.pth img{width:100%;height:100%;object-fit:cover;display:block}
+.pname b{font-weight:500;display:block}
+.pname small{color:var(--muted);font-size:12px}
+.pprice s{color:var(--muted);font-size:12px;display:block}
+.pprice .promo{color:var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);padding:2px 7px;font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip i{width:9px;height:9px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.chip.low{border-color:#E1C08F;background:var(--warn-soft);color:var(--warn)}
+.chip.zero{color:#A69E96;background:var(--soft)}
+.chip.zero span{text-decoration:line-through}
+.pill{display:inline-block;font-size:11.5px;padding:3px 8px;font-weight:500;white-space:nowrap}
+.pill.on{background:var(--ok-soft);color:var(--ok)}
+.pill.off{background:var(--soft);color:var(--muted)}
+.pill.sold{background:var(--bad-soft);color:var(--bad)}
+.pill.new{background:var(--accent-soft);color:var(--accent)}
+.pstat{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.acts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.empty{padding:40px 16px;text-align:center;color:var(--muted)}
+@media(max-width:980px){
+  .prow.hd{display:none}
+  .prow{grid-template-columns:56px minmax(0,1fr);grid-template-areas:"t n" "t p" "c c" "s a";row-gap:8px}
+  .prow>.pth{grid-area:t}.prow>.pname{grid-area:n}.prow>.pprice{grid-area:p}.prow>.chips{grid-area:c}.prow>.ptot{display:none}.prow>.pstat{grid-area:s;flex-direction:row}.prow>.acts{grid-area:a}
+}
+.foot-tools{margin-top:18px;display:flex;justify-content:flex-end}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(20,16,14,.4);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(580px,100%);background:var(--paper);z-index:41;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.14)}
+.dr-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dr-h h2{font-family:var(--display);font-size:24px}
+.x{width:36px;height:36px;display:grid;place-items:center;font-size:22px;line-height:1}
+.dr-b{flex:1;overflow-y:auto;padding:18px 20px 24px;display:grid;gap:18px;align-content:start}
+.dr-f{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--line);background:var(--surface)}
+.sec{display:grid;gap:10px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(max-width:480px){.g2{grid-template-columns:1fr}}
+.checks{display:flex;gap:18px;flex-wrap:wrap}
+.checks label{display:flex;gap:8px;align-items:center;font-size:14px;cursor:pointer}
+.checks input{accent-color:var(--accent);width:16px;height:16px}
+.promo-out{font-size:13px;color:var(--bad)}
+.phgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.phc{position:relative;aspect-ratio:3/4;background:var(--soft);overflow:hidden;border:1px solid var(--line)}
+.phc img{width:100%;height:100%;object-fit:cover;display:block}
+.phc .cap{position:absolute;left:0;top:0;background:var(--ink);color:#fff;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px}
+.phc .ph-a{position:absolute;right:4px;bottom:4px;display:flex;gap:4px}
+.phc .ph-a button{width:26px;height:26px;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:14px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.phadd{aspect-ratio:3/4;border:1px dashed var(--muted);display:grid;place-items:center;text-align:center;font-size:12.5px;color:var(--muted);cursor:pointer;padding:6px}
+.phadd:hover{border-color:var(--ink);color:var(--ink)}
+.crow{display:grid;grid-template-columns:36px minmax(0,1fr) auto 32px;gap:8px;align-items:center}
+.crow input[type=color]{width:36px;height:36px;padding:0;border:1px solid var(--line);background:none}
+.crow .cname{border:1px solid var(--line);background:var(--surface);padding:8px 10px;width:100%}
+.step{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface)}
+.step button{width:32px;height:36px;font-size:17px}
+.step input{width:52px;height:36px;border:0;border-inline:1px solid var(--line);text-align:center;font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+.step input::-webkit-outer-spin-button,.step input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.crow .rm{width:32px;height:36px;color:var(--muted);font-size:18px}
+.crow .rm:hover{color:var(--bad)}
+.ctot{font-size:13px;color:var(--muted);text-align:right}
+
+/* import */
+.imp{display:grid;gap:18px;max-width:980px}
+.card{background:var(--surface);border:1px solid var(--line);padding:18px 20px;display:grid;gap:12px}
+.card h2{font-size:17px;font-weight:500}
+.steps{margin:0;padding-left:20px;display:grid;gap:6px}
+.cols{display:flex;flex-wrap:wrap;gap:6px}
+.cols code{background:var(--soft);padding:3px 8px;font-size:12.5px;font-family:var(--sans)}
+.drop{border:1px dashed var(--muted);padding:28px 16px;text-align:center;display:grid;gap:8px;justify-items:center;cursor:pointer;background:var(--paper)}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.tbl-w{overflow-x:auto;border:1px solid var(--line)}
+table.tbl{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}
+.tbl th,.tbl td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--soft);font-weight:500}
+.tbl td.num{text-align:right}
+.tag{font-size:11.5px;padding:2px 7px;font-weight:500;white-space:nowrap}
+.tag.new{background:var(--ok-soft);color:var(--ok)}
+.tag.upd{background:var(--accent-soft);color:var(--accent)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+.pdf{border-left:3px solid var(--accent);background:var(--accent-soft);padding:14px 16px;display:grid;gap:4px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:11px 18px;font-size:13.5px;z-index:60;max-width:calc(100% - 32px)}
+.toast.bad{background:var(--bad)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginV">
+  <form class="login-c" id="loginF" novalidate>
+    <img src="https://cdn.vendizap.com/vendizap-logos/e487c8350034f5213394cfe0b8434acd.webp" alt="Seu Estilo Premium" referrerpolicy="no-referrer">
+    <h1>Painel da loja</h1>
+    <div class="fld"><label for="lUser">Usuário</label><input id="lUser" type="text" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
+    <div class="fld"><label for="lSenha">Senha</label><input id="lSenha" type="password" autocomplete="current-password"></div>
+    <p class="err" id="lErr" hidden>Usuário ou senha incorretos.</p>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="appV" hidden>
+  <header class="top">
+    <div class="wrap top-in">
+      <div class="brand"><img src="https://cdn.vendizap.com/vendizap-logos/e487c8350034f5213394cfe0b8434acd.webp" alt="Seu Estilo Premium" referrerpolicy="no-referrer"><span>Painel</span></div>
+      <nav class="nav" role="tablist" aria-label="Seções do painel">
+        <button role="tab" aria-selected="true" data-view="prod">Produtos e estoque</button>
+        <button role="tab" aria-selected="false" data-view="imp">Importar planilha</button>
+      </nav>
+      <div class="top-r"><a href="index.html" target="_blank" rel="noopener">Ver loja ↗</a><button class="lnk" id="logout">Sair</button></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- PRODUTOS -->
+    <section id="prodV">
+      <div class="head"><h1>Produtos e estoque</h1><button class="btn" id="newBtn">+ Novo produto</button></div>
+      <div class="stats" id="stats"></div>
+      <div class="tools">
+        <label class="sr" for="q">Buscar produto</label>
+        <input id="q" type="search" placeholder="Buscar por nome ou REF">
+        <label class="sr" for="flt">Filtrar</label>
+        <select id="flt">
+          <option value="todos">Todos os produtos</option>
+          <option value="loja">Visíveis na loja</option>
+          <option value="ocultos">Ocultos</option>
+          <option value="esgotados">Esgotados</option>
+          <option value="baixo">Com estoque baixo</option>
+          <option value="promo">Em promoção</option>
+          <option value="novo">Lançamentos</option>
+        </select>
+        <button class="btn ghost" id="expBtn">Baixar estoque em Excel</button>
+      </div>
+      <div class="plist" id="plist"></div>
+      <div class="foot-tools"><button class="lnk" id="resetBtn">Restaurar o catálogo original</button></div>
+    </section>
+
+    <!-- IMPORTAR -->
+    <section id="impV" hidden>
+      <div class="head"><h1>Importar planilha</h1></div>
+      <div class="imp">
+        <div class="card">
+          <h2>Como funciona</h2>
+          <ol class="steps">
+            <li>Baixe a planilha modelo, ou baixe o estoque atual na aba de produtos.</li>
+            <li>Preencha no Excel: <b>uma linha para cada cor</b> do produto.</li>
+            <li>Envie o arquivo aqui, confira a prévia e confirme.</li>
+          </ol>
+          <div class="cols"><code>Nome</code><code>REF</code><code>Categoria</code><code>Preço</code><code>Desconto (%)</code><code>Cor</code><code>Estoque</code><code>Lançamento (sim/não)</code><code>Fotos (links)</code></div>
+          <p class="note">Produtos que já existem (mesmo nome e REF) têm preço e estoque atualizados. Os outros entram como novos. Fotos podem ser adicionadas depois, no editor de cada produto.</p>
+          <div><button class="btn ghost" id="tplBtn">Baixar planilha modelo</button></div>
+        </div>
+        <label class="drop" id="drop" for="xfile">
+          <b>Escolha a planilha ou arraste até aqui</b>
+          <span class="note">Excel (.xlsx) ou .csv</span>
+          <input id="xfile" type="file" accept=".xlsx,.xls,.csv" class="sr">
+        </label>
+        <div id="prev"></div>
+        <div class="pdf">
+          <b>Tem o catálogo em PDF?</b>
+          <p class="note">Envie o PDF para a IL Marketing. A gente converte na planilha modelo, com nomes, cores, preços e descontos, e você só importa aqui.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- EDITOR -->
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-labelledby="edT">
+  <div class="dr-h"><h2 id="edT">Novo produto</h2><button class="x" id="edClose" aria-label="Fechar editor">×</button></div>
+  <form class="dr-b" id="edF" novalidate>
+    <div class="sec">
+      <p class="lbl">Fotos</p>
+      <div class="phgrid" id="phgrid"></div>
+      <input id="phFile" type="file" accept="image/*" multiple class="sr">
+      <p class="note">A primeira foto é a capa. As fotos são reduzidas automaticamente.</p>
+    </div>
+    <div class="fld"><label for="eName">Nome do produto</label><input id="eName" placeholder="Ex.: Vestido Sabrina"></div>
+    <div class="g2">
+      <div class="fld"><label for="eRef">REF</label><input id="eRef" placeholder="Ex.: 035"></div>
+      <div class="fld"><label for="eCat">Categoria</label><input id="eCat" list="catList" placeholder="Ex.: Vestidos"><datalist id="catList"></datalist></div>
+    </div>
+    <div class="g2">
+      <div class="fld"><label for="ePrice">Preço por peça (R$)</label><input id="ePrice" inputmode="decimal" placeholder="Ex.: 55,00"></div>
+      <div class="fld"><label for="ePct">Desconto (%)</label><input id="ePct" inputmode="numeric" placeholder="Sem desconto"><small class="promo-out" id="promoOut"></small></div>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="eActive"> Mostrar na loja</label>
+      <label><input type="checkbox" id="eNovo"> Lançamento (aparece em "Acabou de chegar")</label>
+    </div>
+    <div class="sec">
+      <p class="lbl">Cores e estoque</p>
+      <div id="crows" class="sec"></div>
+      <datalist id="coresList"></datalist>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><button type="button" class="btn ghost sm" id="addColor">+ Adicionar cor</button><span class="ctot num" id="ctot"></span></div>
+    </div>
+    <p class="err" id="edErr" hidden></p>
+  </form>
+  <div class="dr-f"><button class="btn ghost" id="edCancel">Cancelar</button><button class="btn" id="edSave">Salvar produto</button></div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="dados.js"></script>
+<script src="store.js"></script>
+<script src="config-admin.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl=n=>Number(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const norm=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+const round2=n=>Math.round(n*100)/100;
+const CORES=window.CORES||{};
+const hexOf=n=>{const k=Object.keys(CORES).find(c=>norm(c)===norm(n));return k?CORES[k]:null};
+const LOW=2;
+
+let list=Store.load();
+let ed=null, pending=null, qv='', fv='todos';
+
+function toast(t,bad){const el=$('#toast');el.textContent=t;el.className='toast'+(bad?' bad':'');el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2800)}
+function persist(){const ok=Store.save(list);if(!ok)toast('Não coube no armazenamento do navegador. Use menos fotos ou fotos menores.',true);return ok}
+const stockOf=p=>p.colors.reduce((a,c)=>a+(+c.st||0),0);
+const isSold=p=>stockOf(p)===0;
+const lowColors=p=>p.colors.filter(c=>c.st>0&&c.st<=LOW);
+const pctOf=p=>p.promo?Math.round((1-p.promo/p.price)*100):0;
+
+/* ---------- login ---------- */
+function authed(){try{return sessionStorage.getItem('sep_admin')==='1'}catch(e){return false}}
+function showApp(){ $('#loginV').hidden=authed(); $('#appV').hidden=!authed(); if(authed()) renderList() }
+async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+$('#loginF').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const ok=norm($('#lUser').value)===norm(ADMIN_LOGIN.usuario)&&await sha256($('#lSenha').value)===ADMIN_LOGIN.senhaSha256;
+  $('#lErr').hidden=ok;
+  if(ok){try{sessionStorage.setItem('sep_admin','1')}catch(e){} showApp()}
+});
+$('#logout').addEventListener('click',()=>{try{sessionStorage.removeItem('sep_admin')}catch(e){} $('#lSenha').value=''; showApp()});
+
+/* ---------- navegação ---------- */
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-selected',x===b));
+  $('#prodV').hidden=b.dataset.view!=='prod'; $('#impV').hidden=b.dataset.view!=='imp';
+  if(b.dataset.view==='prod') renderList();
+}));
+
+/* ---------- lista ---------- */
+function renderStats(){
+  const vis=list.filter(p=>p.active!==false);
+  const sold=vis.filter(isSold).length, low=vis.reduce((a,p)=>a+lowColors(p).length,0), pcs=vis.reduce((a,p)=>a+stockOf(p),0);
+  $('#stats').innerHTML=`
+    <button class="stat" data-f="loja"><span class="lbl">Na loja</span><b>${vis.length}</b><span class="note">${list.length-vis.length} ocultos</span></button>
+    <button class="stat ${sold?'bad':''}" data-f="esgotados"><span class="lbl">Esgotados</span><b>${sold}</b><span class="note">todas as cores zeradas</span></button>
+    <button class="stat ${low?'warn':''}" data-f="baixo"><span class="lbl">Estoque baixo</span><b>${low}</b><span class="note">cores com ${LOW} peças ou menos</span></button>
+    <div class="stat"><span class="lbl">Peças em estoque</span><b>${pcs.toLocaleString('pt-BR')}</b><span class="note">somando a loja toda</span></div>`;
+}
+function filtered(){
+  const qq=norm(qv);
+  return list.filter(p=>{
+    if(qq&&!norm(p.name).includes(qq)&&!norm(p.ref).includes(qq)) return false;
+    switch(fv){
+      case 'loja':return p.active!==false;
+      case 'ocultos':return p.active===false;
+      case 'esgotados':return p.active!==false&&isSold(p);
+      case 'baixo':return lowColors(p).length>0;
+      case 'promo':return !!p.promo;
+      case 'novo':return !!p.novo;
+      default:return true;
+    }
+  });
+}
+function renderList(){
+  renderStats();
+  const rows=filtered();
+  const head=`<div class="prow hd"><span></span><span>Produto</span><span>Preço</span><span>Cores e estoque</span><span>Total</span><span>Situação</span><span></span></div>`;
+  $('#plist').innerHTML=rows.length?head+rows.map(p=>{
+    const hidden=p.active===false, sold=isSold(p);
+    const chips=p.colors.map(c=>`<span class="chip ${c.st===0?'zero':c.st<=LOW?'low':''}" title="${esc(c.n)}: ${c.st} peças"><i style="background:${esc(c.hex)}"></i><span>${esc(c.n)}</span> <b>${c.st}</b></span>`).join('');
+    const pill=hidden?'<span class="pill off">Oculto</span>':sold?'<span class="pill sold">Esgotado</span>':'<span class="pill on">Na loja</span>';
+    return `<div class="prow">
+      <div class="pth">${p.imgs[0]?`<img src="${Store.thumb(p.imgs[0])}" alt="" loading="lazy" referrerpolicy="no-referrer">`:'Sem foto'}</div>
+      <div class="pname"><b>${esc(p.name)}</b><small>REF ${esc(p.ref)} · ${esc(p.cat)}</small></div>
+      <div class="pprice num">${p.promo?`<s>${brl(p.price)}</s><span class="promo">${brl(p.promo)} (−${pctOf(p)}%)</span>`:brl(p.price)}</div>
+      <div class="chips">${chips||'<span class="muted">Sem cores</span>'}</div>
+      <div class="ptot num"><b>${stockOf(p)}</b></div>
+      <div class="pstat">${pill}${p.novo?'<span class="pill new">Lançamento</span>':''}</div>
+      <div class="acts"><button class="btn ghost sm" data-edit="${p.id}">Editar</button><button class="btn ghost sm" data-vis="${p.id}">${hidden?'Mostrar':'Ocultar'}</button><button class="btn ghost sm" data-del="${p.id}">Remover</button></div>
+    </div>`}).join(''):`<p class="empty">Nenhum produto encontrado.</p>`;
+}
+$('#q').addEventListener('input',e=>{qv=e.target.value;renderList()});
+$('#flt').addEventListener('change',e=>{fv=e.target.value;renderList()});
+$('#stats').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;fv=b.dataset.f;$('#flt').value=fv;renderList()});
+$('#plist').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.edit) openEditor(b.dataset.edit);
+  if(b.dataset.vis){const p=list.find(x=>x.id===b.dataset.vis);p.active=p.active===false;if(persist()){renderList();toast(p.active?`${p.name} voltou para a loja.`:`${p.name} saiu da loja.`)}}
+  if(b.dataset.del){
+    if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Confirmar';b.classList.add('danger');b.classList.remove('ghost');setTimeout(()=>{if(b.isConnected){b.dataset.confirm='';b.textContent='Remover';b.classList.remove('danger');b.classList.add('ghost')}},4000);return}
+    const p=list.find(x=>x.id===b.dataset.del); list=list.filter(x=>x!==p); if(persist()){renderList();toast(`${p.name} foi removido.`)}
+  }
+});
+$('#resetBtn').addEventListener('click',e=>{
+  const b=e.currentTarget;
+  if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='Clique de novo para apagar as alterações e voltar ao catálogo original';setTimeout(()=>{b.dataset.confirm='';b.textContent='Restaurar o catálogo original'},5000);return}
+  Store.reset(); list=Store.load(); b.dataset.confirm=''; b.textContent='Restaurar o catálogo original'; renderList(); toast('Catálogo original restaurado.');
+});
+
+/* ---------- editor ---------- */
+function openEditor(id){
+  const p=id?list.find(x=>x.id===id):null;
+  ed=p?JSON.parse(JSON.stringify(p)):{id:null,name:'',ref:'',cat:'',price:'',promo:null,colors:[{n:'',hex:'#cccccc',st:0}],imgs:[],novo:true,active:true};
+  $('#edT').textContent=p?'Editar produto':'Novo produto';
+  $('#eName').value=ed.name; $('#eRef').value=ed.ref; $('#eCat').value=ed.cat;
+  $('#ePrice').value=ed.price?String(ed.price).replace('.',','):''; $('#ePct').value=ed.promo?pctOf(ed):'';
+  $('#eActive').checked=ed.active!==false; $('#eNovo').checked=!!ed.novo;
+  $('#catList').innerHTML=[...new Set(list.map(x=>x.cat))].map(c=>`<option value="${esc(c)}">`).join('');
+  $('#coresList').innerHTML=Object.keys(CORES).map(c=>`<option value="${esc(c)}">`).join('');
+  $('#edErr').hidden=true;
+  renderPhotos(); renderColors(); updPromo();
+  $('#drawer').hidden=false; $('#scrim').hidden=false; document.body.style.overflow='hidden'; $('#eName').focus();
+}
+function closeEditor(){ed=null;$('#drawer').hidden=true;$('#scrim').hidden=true;document.body.style.overflow=''}
+function renderPhotos(){
+  $('#phgrid').innerHTML=ed.imgs.map((h,i)=>`<div class="phc"><img src="${Store.thumb(h)}" alt="Foto ${i+1}" referrerpolicy="no-referrer">${i===0?'<span class="cap">Capa</span>':''}
+    <div class="ph-a">${i>0?`<button type="button" data-cover="${i}" title="Usar como capa" aria-label="Usar foto ${i+1} como capa">★</button>`:''}<button type="button" data-phrm="${i}" title="Remover foto" aria-label="Remover foto ${i+1}">×</button></div></div>`).join('')
+    +`<label class="phadd" for="phFile">+ Adicionar fotos</label>`;
+}
+function renderColors(){
+  $('#crows').innerHTML=ed.colors.map((c,i)=>`<div class="crow">
+    <input type="color" value="${/^#[0-9a-f]{6}$/i.test(c.hex)?c.hex:'#cccccc'}" data-chex="${i}" aria-label="Cor ${i+1}">
+    <input class="cname" list="coresList" value="${esc(c.n)}" data-cname="${i}" placeholder="Nome da cor" aria-label="Nome da cor ${i+1}">
+    <span class="step"><button type="button" data-cdec="${i}" aria-label="Menos uma peça">−</button><input type="number" min="0" inputmode="numeric" value="${c.st}" data-cst="${i}" aria-label="Estoque da cor ${i+1}"><button type="button" data-cinc="${i}" aria-label="Mais uma peça">+</button></span>
+    <button type="button" class="rm" data-crm="${i}" aria-label="Remover cor ${i+1}" title="Remover cor">×</button></div>`).join('');
+  updTot();
+}
+function updTot(){$('#ctot').textContent=`${ed.colors.reduce((a,c)=>a+(+c.st||0),0)} peças no total`}
+const parseMoney=v=>{if(typeof v==='number')return v;let s=String(v??'').replace(/[R$\s]/g,'');if(!s)return NaN;if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');return parseFloat(s)};
+function updPromo(){
+  const pr=parseMoney($('#ePrice').value), pct=parseFloat($('#ePct').value);
+  $('#promoOut').textContent=pr>0&&pct>0&&pct<100?`Preço com desconto: ${brl(round2(pr*(1-pct/100)))}`:'';
+}
+$('#ePrice').addEventListener('input',updPromo);$('#ePct').addEventListener('input',updPromo);
+$('#crows').addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.cst!==undefined){ed.colors[+t.dataset.cst].st=Math.max(0,parseInt(t.value,10)||0);updTot()}
+  if(t.dataset.cname!==undefined){const c=ed.colors[+t.dataset.cname];c.n=t.value;const h=hexOf(t.value);if(h){c.hex=h;t.previousElementSibling.value=h}}
+  if(t.dataset.chex!==undefined){ed.colors[+t.dataset.chex].hex=t.value}
+});
+$('#crows').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.cinc!==undefined||b.dataset.cdec!==undefined){const i=+(b.dataset.cinc??b.dataset.cdec);const c=ed.colors[i];c.st=Math.max(0,(+c.st||0)+(b.dataset.cinc!==undefined?1:-1));b.parentElement.querySelector('input').value=c.st;updTot()}
+  if(b.dataset.crm!==undefined){ed.colors.splice(+b.dataset.crm,1);renderColors()}
+});
+$('#addColor').addEventListener('click',()=>{ed.colors.push({n:'',hex:'#cccccc',st:0});renderColors();$('#crows').lastElementChild.querySelector('.cname').focus()});
+$('#phgrid').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.phrm!==undefined){ed.imgs.splice(+b.dataset.phrm,1);renderPhotos()}
+  if(b.dataset.cover!==undefined){const [h]=ed.imgs.splice(+b.dataset.cover,1);ed.imgs.unshift(h);renderPhotos()}
+});
+function shrink(file){
+  return new Promise((res,rej)=>{
+    const fr=new FileReader();
+    fr.onload=()=>{const im=new Image();im.onload=()=>{const max=900,k=Math.min(1,max/Math.max(im.width,im.height));const cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);res(cv.toDataURL('image/jpeg',.8))};im.onerror=rej;im.src=fr.result};
+    fr.onerror=rej;fr.readAsDataURL(file);
+  });
+}
+$('#phFile').addEventListener('change',async e=>{
+  const files=[...e.target.files].filter(f=>f.type.startsWith('image/'));
+  for(const f of files){try{ed.imgs.push(await shrink(f))}catch(err){toast(`Não consegui ler a foto ${f.name}.`,true)}}
+  e.target.value='';renderPhotos();
+});
+function saveEditor(){
+  const name=$('#eName').value.trim(), ref=$('#eRef').value.trim(), cat=$('#eCat').value.trim()||'Outros';
+  const price=parseMoney($('#ePrice').value), pct=parseFloat($('#ePct').value)||0;
+  const colors=ed.colors.filter(c=>c.n.trim()).map(c=>({n:c.n.trim(),hex:c.hex,st:Math.max(0,+c.st||0)}));
+  const errs=[];
+  if(!name) errs.push('o nome');
+  if(!ref) errs.push('a REF');
+  if(!(price>0)) errs.push('o preço');
+  if(!colors.length) errs.push('pelo menos uma cor');
+  if(errs.length){$('#edErr').textContent=`Preencha ${errs.join(', ')}.`;$('#edErr').hidden=false;return}
+  if(pct<0||pct>=100){$('#edErr').textContent='O desconto precisa ficar entre 0 e 99%.';$('#edErr').hidden=false;return}
+  const dup=list.find(x=>x.id!==ed.id&&norm(x.name)===norm(name)&&norm(x.ref)===norm(ref));
+  if(dup){$('#edErr').textContent=`Já existe um produto com esse nome e REF (${dup.name}).`;$('#edErr').hidden=false;return}
+  const out={...ed,name,ref,cat,price:round2(price),promo:pct>0?round2(price*(1-pct/100)):null,colors,novo:$('#eNovo').checked,active:$('#eActive').checked};
+  if(!out.id){out.id='n'+Date.now().toString(36);list.unshift(out)} else list[list.findIndex(x=>x.id===out.id)]=out;
+  if(persist()){closeEditor();renderList();toast(`${name} salvo. A loja já está atualizada.`)}
+}
+$('#edSave').addEventListener('click',saveEditor);
+$('#edF').addEventListener('submit',e=>{e.preventDefault();saveEditor()});
+$('#edCancel').addEventListener('click',closeEditor);$('#edClose').addEventListener('click',closeEditor);$('#scrim').addEventListener('click',closeEditor);
+$('#newBtn').addEventListener('click',()=>openEditor(null));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#drawer').hidden)closeEditor()});
+
+/* ---------- planilha ---------- */
+const HEAD=['Nome','REF','Categoria','Preço','Desconto (%)','Cor','Estoque','Lançamento (sim/não)','Fotos (links)'];
+function colKey(h){
+  const k=norm(h);
+  if(k.startsWith('nome')||k==='produto')return 'name';
+  if(k.startsWith('ref')||k.startsWith('codigo'))return 'ref';
+  if(k.startsWith('categ'))return 'cat';
+  if(k.startsWith('preco promo'))return 'promo';
+  if(k.startsWith('preco')||k==='valor')return 'price';
+  if(k.startsWith('desconto'))return 'pct';
+  if(k==='cor'||k==='cores')return 'color';
+  if(k.startsWith('estoque')||k.startsWith('quant')||k==='qtd')return 'st';
+  if(k.startsWith('lancamento')||k==='novo')return 'novo';
+  if(k.startsWith('foto')||k.startsWith('imag'))return 'fotos';
+  return null;
+}
+const yes=v=>['sim','s','x','1','true','yes'].includes(norm(v));
+function parseSheet(rows){
+  const groups=new Map();
+  rows.forEach((r,i)=>{
+    const o={};for(const h in r){const k=colKey(h);if(k)o[k]=r[h]}
+    if(!String(o.name??'').trim()&&!String(o.ref??'').trim())return;
+    const key=norm(o.name)+'|'+norm(o.ref);
+    if(!groups.has(key))groups.set(key,{name:String(o.name??'').trim(),ref:String(o.ref??'').trim(),rows:[]});
+    groups.get(key).rows.push({...o,line:i+2});
+  });
+  return [...groups.values()].map(g=>{
+    const pick=k=>{const r=g.rows.find(x=>String(x[k]??'').trim()!=='');return r?r[k]:undefined};
+    const price=pick('price')!==undefined?parseMoney(pick('price')):undefined;
+    const pctRaw=pick('pct'), promoRaw=pick('promo');
+    const colors=g.rows.filter(r=>String(r.color??'').trim()).map(r=>({n:String(r.color).trim(),st:Math.max(0,parseInt(parseMoney(r.st),10)||0)}));
+    if(!colors.length&&g.rows.some(r=>String(r.st??'').trim()!==''))colors.push({n:'Única',st:Math.max(0,parseInt(parseMoney(g.rows[0].st),10)||0)});
+    const fotos=pick('fotos')?String(pick('fotos')).split(/[\s,;]+/).filter(u=>/^https?:\/\//.test(u)):[];
+    const existing=list.find(p=>norm(p.name)===norm(g.name)&&norm(p.ref)===norm(g.ref));
+    const errs=[];
+    if(!g.name)errs.push('falta o nome');
+    if(!g.ref)errs.push('falta a REF');
+    if(!existing&&!(price>0))errs.push('falta o preço');
+    if(price!==undefined&&!(price>0))errs.push('preço inválido');
+    let pct;
+    if(pctRaw!==undefined){pct=parseMoney(pctRaw);if(!(pct>=0&&pct<100)){errs.push('desconto inválido');pct=undefined}}
+    else if(promoRaw!==undefined&&price>0){const pm=parseMoney(promoRaw);if(pm>0&&pm<price)pct=round2((1-pm/price)*100)}
+    return {name:g.name,ref:g.ref,cat:pick('cat')!==undefined?String(pick('cat')).trim():undefined,price,pct,novo:pick('novo')!==undefined?yes(pick('novo')):undefined,colors,fotos,existing,errs,lines:g.rows.map(r=>r.line)};
+  });
+}
+function renderPreview(){
+  if(!pending){$('#prev').innerHTML='';return}
+  const ok=pending.filter(x=>!x.errs.length), nNew=ok.filter(x=>!x.existing).length, nUpd=ok.length-nNew, nBad=pending.length-ok.length;
+  $('#prev').innerHTML=`<div class="card">
+    <h2>Prévia da importação</h2>
+    <p><b>${nNew}</b> ${nNew===1?'novo':'novos'} · <b>${nUpd}</b> ${nUpd===1?'atualizado':'atualizados'}${nBad?` · <b style="color:var(--bad)">${nBad}</b> com erro (não ${nBad===1?'entra':'entram'})`:''}</p>
+    <div class="tbl-w"><table class="tbl"><thead><tr><th>Situação</th><th>Produto</th><th>REF</th><th>Categoria</th><th class="num">Preço</th><th class="num">Desc.</th><th>Cores e estoque</th></tr></thead><tbody>
+    ${pending.map(x=>`<tr><td>${x.errs.length?`<span class="tag bad">Erro: ${esc(x.errs.join(', '))}</span><br><small class="muted">linha ${x.lines.join(', ')}</small>`:x.existing?'<span class="tag upd">Atualiza</span>':'<span class="tag new">Novo</span>'}</td>
+      <td>${esc(x.name)}</td><td>${esc(x.ref)}</td><td>${esc(x.cat??(x.existing?x.existing.cat:'Outros'))}</td>
+      <td class="num">${x.price>0?brl(x.price):(x.existing?`<span class="muted">${brl(x.existing.price)}</span>`:'—')}</td>
+      <td class="num">${x.pct!==undefined?(x.pct>0?`${x.pct}%`:'sem'):'—'}</td>
+      <td>${x.colors.map(c=>`${esc(c.n)} <b>${c.st}</b>`).join(' · ')||'<span class="muted">sem alteração</span>'}</td></tr>`).join('')}
+    </tbody></table></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="impCancel">Cancelar</button><button class="btn" id="impGo" ${ok.length?'':'disabled'}>Importar ${ok.length} ${ok.length===1?'produto':'produtos'}</button></div>
+  </div>`;
+}
+function applyImport(){
+  let nNew=0,nUpd=0;
+  for(const x of pending.filter(x=>!x.errs.length)){
+    if(x.existing){
+      const p=list.find(q=>q.id===x.existing.id), oldPct=pctOf(p);
+      if(x.price>0)p.price=round2(x.price);
+      if(x.cat)p.cat=x.cat;
+      if(x.novo!==undefined)p.novo=x.novo;
+      const pct=x.pct!==undefined?x.pct:oldPct;
+      p.promo=pct>0?round2(p.price*(1-pct/100)):null;
+      for(const c of x.colors){const ex=p.colors.find(k=>norm(k.n)===norm(c.n));if(ex)ex.st=c.st;else p.colors.push({n:c.n,hex:hexOf(c.n)||'#cccccc',st:c.st})}
+      if(x.fotos.length)p.imgs=x.fotos;
+      nUpd++;
+    }else{
+      list.unshift({id:'n'+Date.now().toString(36)+nNew,name:x.name,ref:x.ref,cat:x.cat||'Outros',price:round2(x.price),promo:x.pct>0?round2(x.price*(1-x.pct/100)):null,
+        colors:x.colors.length?x.colors.map(c=>({n:c.n,hex:hexOf(c.n)||'#cccccc',st:c.st})):[{n:'Única',hex:'#cccccc',st:0}],imgs:x.fotos,novo:x.novo??true,active:true});
+      nNew++;
+    }
+  }
+  if(persist()){pending=null;renderPreview();toast(`Importado: ${nNew} ${nNew===1?'novo':'novos'} e ${nUpd} ${nUpd===1?'atualizado':'atualizados'}.`);document.querySelector('[data-view="prod"]').click()}
+}
+async function readFile(file){
+  if(!window.XLSX){toast('Não consegui carregar o leitor de planilhas. Confira a internet e tente de novo.',true);return}
+  try{
+    const wb=XLSX.read(await file.arrayBuffer());
+    const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
+    if(!rows.length){toast('A planilha está vazia.',true);return}
+    if(!Object.keys(rows[0]).some(h=>colKey(h)==='name')){toast('Não achei a coluna "Nome". Use a planilha modelo.',true);return}
+    pending=parseSheet(rows);renderPreview();
+  }catch(err){toast('Não consegui ler esse arquivo. Salve como .xlsx e tente de novo.',true)}
+}
+$('#xfile').addEventListener('change',e=>{const f=e.target.files[0];if(f)readFile(f);e.target.value=''});
+const drop=$('#drop');
+['dragenter','dragover'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)readFile(f)});
+$('#prev').addEventListener('click',e=>{if(e.target.id==='impGo')applyImport();if(e.target.id==='impCancel'){pending=null;renderPreview()}});
+function sheetFrom(rows,name){const ws=XLSX.utils.aoa_to_sheet([HEAD,...rows]);ws['!cols']=HEAD.map((h,i)=>({wch:[22,8,12,10,12,18,9,20,40][i]}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Produtos');XLSX.writeFile(wb,name)}
+$('#tplBtn').addEventListener('click',()=>{
+  if(!window.XLSX)return toast('Não consegui carregar o gerador de planilhas.',true);
+  sheetFrom([['Vestido Exemplo','050','Vestidos',59.9,'','Preto',10,'sim',''],['Vestido Exemplo','050','Vestidos',59.9,'','Off White',6,'sim',''],['Body Exemplo','040','Bodys',30,10,'Pink',8,'não','']],'modelo-produtos-seu-estilo.xlsx');
+});
+$('#expBtn').addEventListener('click',()=>{
+  if(!window.XLSX)return toast('Não consegui carregar o gerador de planilhas.',true);
+  const rows=[];
+  for(const p of list){const fotos=p.imgs.filter(h=>!h.startsWith('data:')).map(Store.full).join(', ');
+    for(const c of p.colors)rows.push([p.name,p.ref,p.cat,p.price,pctOf(p)||'',c.n,c.st,p.novo?'sim':'não',fotos])}
+  sheetFrom(rows,`estoque-seu-estilo-${new Date().toISOString().slice(0,10)}.xlsx`);
+});
+
+/* ---------- sincronia entre abas ---------- */
+addEventListener('storage',e=>{if(e.key===Store.key&&!ed){list=Store.load();renderList()}});
+
+showApp();
+</script>
+</body>
+</html>
