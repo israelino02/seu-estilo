@@ -203,14 +203,11 @@ input{font:inherit;color:inherit}
 .pd-t{font-family:var(--display);font-size:clamp(34px,5vw,50px);line-height:1.02;font-weight:500}
 .desc{color:var(--muted);font-weight:300;max-width:52ch}
 .lbl{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
-.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));border:1px solid var(--line);background:var(--surface)}
-.tiers div{padding:12px 14px;display:grid;gap:2px;border-right:1px solid var(--line)}
-.tiers div:last-child{border-right:0}
-.tiers small{font-size:11.5px;color:var(--muted);letter-spacing:.04em}
-.tiers b{font-size:19px;font-weight:500;font-variant-numeric:tabular-nums}
-.tiers s{font-size:13px;color:var(--muted)}
-.tiers .on{background:var(--accent-soft);box-shadow:inset 0 -2px 0 var(--accent)}
-.tiers .on small{color:var(--accent)}
+.pd-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font-variant-numeric:tabular-nums}
+.pd-price b{font-size:28px;font-weight:500}
+.pd-price b.sale{color:var(--sale)}
+.pd-price s{color:var(--muted);font-size:16px}
+.pd-price span{color:var(--muted);font-size:13px}
 .grade-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .gwrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
 .grade{border-collapse:collapse;width:100%;font-size:14px}
@@ -299,7 +296,7 @@ input{font:inherit;color:inherit}
 
 <div class="proto">
   <div class="wrap proto-in">
-    <p class="proto-tag"><b>Protótipo navegável</b> · Loja de Atacado IL <span>· catálogo real da Seu Estilo Premium · preço por quantidade é exemplo</span></p>
+    <p class="proto-tag"><b>Protótipo navegável</b> · Loja de Atacado IL <span>· catálogo real da Seu Estilo Premium</span></p>
     <div class="proto-ctl">
       <div class="sw" role="radiogroup" aria-label="Cor da marca" id="sw"></div>
     </div>
@@ -447,12 +444,11 @@ const PRODUCTS=RAW.map(([name,ref,cat,price,promo,cs,im],i)=>({
   id:'p'+i,name,ref,cat,price,promo,
   colors:cs.split('|').map(x=>{const [n,s]=x.split(':');return{n,hex:HEX[n]||'#ccc',st:+s}}),
   imgs:im.split(',').map(h=>h+'.webp'),
-  novo:parseInt(ref,10)>=34,
-  tiers:promo?[[1,promo]]:[[1,price],[12,Math.round(price*90)/100]]
+  novo:parseInt(ref,10)>=34
 }));
 const CATS=['Todos','Vestidos','Bodys','Promoções'];
 const ACCENTS=[['Café','#4A2C20'],['Preto','#1F1A17'],['Marinho','#1C2340'],['Rosa','#A3285A']];
-const ANN=['Pedido mínimo de R$ 250 para envio','Peças 100% forradas na poliamida premium','Moda Center · Setor Azul · Rua O · Box 63','12 peças do mesmo modelo: preço menor'];
+const ANN=['Pedido mínimo de R$ 250 para envio','Peças 100% forradas na poliamida premium','Moda Center · Setor Azul · Rua O · Box 63'];
 const MIN=250, STORE='Seu Estilo Premium';
 
 const $=s=>document.querySelector(s);
@@ -468,13 +464,12 @@ const waLink=text=>`https://wa.me/${WA}?text=${encodeURIComponent(text)}`;
 let form={nome:'',zap:'',cid:'',envio:'excursao',exc:'',pag:'whats'}, done=null, triedSubmit=false;
 
 const piecesOf=d=>d?Object.values(d).reduce((a,n)=>a+n,0):0;
-function tierIdx(p,pcs){let i=0;p.tiers.forEach((t,k)=>{if(pcs>=t[0])i=k});return i}
-const unit=(p,pcs)=>p.tiers[tierIdx(p,pcs)][1];
-function totals(){let pcs=0,val=0;for(const id in cart){const p=byId(id),n=piecesOf(cart[id]);pcs+=n;val+=n*unit(p,n)}return{pcs,val}}
+const unit=p=>p.promo||p.price;
+function totals(){let pcs=0,val=0;for(const id in cart){const p=byId(id),n=piecesOf(cart[id]);pcs+=n;val+=n*unit(p)}return{pcs,val}}
 
 function priceHtml(p){
   if(p.promo) return `<p class="price sale"><s>${brl(p.price)}</s><b>${brl(p.promo)}</b></p><p class="tier" style="color:var(--sale)">Promoção · últimas peças</p>`;
-  return `<p class="price"><b>${brl(p.price)}</b> <span>atacado</span></p><p class="tier">12+ peças: ${brl(p.tiers[1][1])}</p>`;
+  return `<p class="price"><b>${brl(p.price)}</b> <span>atacado</span></p>`;
 }
 function card(p){
   const sold=!avail(p).length;
@@ -504,12 +499,8 @@ function goHome(target){
   if(railStale){railStale=false;buildRail()}
   if(target){const el=document.getElementById(target); if(el) el.scrollIntoView({behavior:'smooth'})} else window.scrollTo(0,0);
 }
-function tiersHtml(p,pcs){
-  if(p.promo) return `<div><p class="lbl" style="margin-bottom:10px">Preço por peça</p><div class="tiers"><div class="on"><small>Promoção, qualquer quantidade</small><b>${brl(p.promo)} <s>${brl(p.price)}</s></b></div></div></div>`;
-  const i=pcs?tierIdx(p,pcs):-1;
-  return `<div><p class="lbl" style="margin-bottom:10px">Preço por peça</p><div class="tiers" id="tiers">${p.tiers.map((t,k)=>{
-    const next=p.tiers[k+1]; const r=next?`${t[0]} a ${next[0]-1} peças`:`${t[0]} peças ou mais`;
-    return `<div class="${k===i?'on':''}"><small>${r}</small><b>${brl(t[1])}</b></div>`}).join('')}</div></div>`;
+function priceBox(p){
+  return `<p class="pd-price">${p.promo?`<s>${brl(p.price)}</s><b class="sale">${brl(p.promo)}</b>`:`<b>${brl(p.price)}</b>`}<span>por peça no atacado</span></p>`;
 }
 function gradeHtml(p){
   return `<div class="grade-h"><p class="lbl">Quantas peças de cada cor</p>${avail(p).length>1?'<button class="mini" data-sort>+1 de cada cor</button>':''}</div>
@@ -527,7 +518,7 @@ function renderProduct(){
         <div class="gal-th">${p.imgs.map((h,k)=>`<button class="th ${k===selImg?'on':''}" data-img="${k}" aria-label="Foto ${k+1}">${img(TH+h,'')}</button>`).join('')}</div></div>
       <div class="info">
         <div style="display:grid;gap:10px"><p class="ref">REF ${p.ref} · ${p.cat}${p.novo?' · Lançamento':''}</p><h1 class="pd-t">${esc(p.name)}</h1><p class="desc">Peça 100% forrada na poliamida premium. ${p.colors.length} ${p.colors.length===1?'cor disponível':'cores no catálogo'}, estoque atualizado por cor.</p></div>
-        <div id="tiersBox">${tiersHtml(p,pcs)}</div>
+        ${priceBox(p)}
         ${sold?'<p class="hint neutral">Modelo esgotado em todas as cores. Volta na próxima produção.</p>':`<div style="display:grid;gap:10px">${gradeHtml(p)}</div><div class="sum" id="sum"></div>`}
         <div class="facts"><p>Pedido mínimo da loja: ${brl(MIN)}, somando modelos diferentes.</p><p>Envio por excursão, transportadora ou retirada no box 63 do Moda Center.</p></div>
       </div>
@@ -545,14 +536,10 @@ function setQty(i,v){
 }
 function updSum(){
   const p=byId(cur), pcs=piecesOf(draft), had=!!cart[cur], box=$('#sum'); if(!box) return;
-  const tb=$('#tiers'); if(tb){const i=pcs?tierIdx(p,pcs):-1;[...tb.children].forEach((d,k)=>d.classList.toggle('on',k===i))}
-  const u=unit(p,pcs), nt=p.tiers.find(t=>t[0]>pcs), stock=p.colors.reduce((a,c)=>a+c.st,0);
-  let hint;
+  const u=unit(p);
+  let hint='';
   if(!pcs) hint=`<p class="hint neutral">Digite as quantidades por cor. O botão “+1 de cada cor” monta um sortido.</p>`;
   else if(p.promo) hint=`<p class="hint">Preço promocional aplicado.</p>`;
-  else if(nt&&stock>=nt[0]) hint=`<p class="hint">Faltam ${nt[0]-pcs} ${nt[0]-pcs===1?'peça':'peças'} deste modelo, em qualquer cor, para pagar ${brl(nt[1])} por peça.</p>`;
-  else if(nt) hint=`<p class="hint neutral">O estoque atual deste modelo não chega a ${nt[0]} peças.</p>`;
-  else hint=`<p class="hint">Você chegou ao melhor preço deste modelo.</p>`;
   const label=had?(pcs?'Atualizar pedido':'Tirar do pedido'):'Adicionar ao pedido';
   box.innerHTML=`<div class="sum-row"><span class="num">${pcs} ${pcs===1?'peça':'peças'} × ${brl(u)}</span><b class="num">${brl(pcs*u)}</b></div>${hint}<button class="btn block" data-add ${(!pcs&&!had)?'disabled':''}>${label}</button>`;
 }
@@ -573,7 +560,7 @@ function renderDrawer(){
   const ids=Object.keys(cart);
   if(!ids.length){b.innerHTML=`<p class="desc">Seu pedido está vazio. Abra um modelo e escolha as quantidades por cor.</p><button class="btn" data-go="cat" data-close>Ver catálogo</button>`;return}
   const {pcs,val}=totals(), ok=val>=MIN, pct=Math.min(100,val/MIN*100);
-  const items=ids.map(id=>{const p=byId(id),d=cart[id],n=piecesOf(d),u=unit(p,n);
+  const items=ids.map(id=>{const p=byId(id),d=cart[id],n=piecesOf(d),u=unit(p);
     return `<div class="it"><div class="ph">${img(TH+p.imgs[0],p.name)}</div><div>
       <p class="ref">REF ${p.ref}</p><h3>${esc(p.name)}</h3>
       <p class="it-l">${colorLine(p,d)}</p>
@@ -601,7 +588,7 @@ function renderDrawer(){
 }
 function msgText(o){
   const L=['Olá! Quero fazer este pedido pelo site:','',`*Pedido #${o.no} · ${STORE}*`,`Cliente: ${o.nome}${o.cid?' · '+o.cid:''}`,`WhatsApp: ${o.zap}`,''];
-  for(const id in o.cart){const p=byId(id),d=o.cart[id],n=piecesOf(d),u=unit(p,n);
+  for(const id in o.cart){const p=byId(id),d=o.cart[id],n=piecesOf(d),u=unit(p);
     L.push(`REF ${p.ref} · ${p.name}`,`   ${colorLine(p,d)}`,`   ${n} pç × ${brl(u)} = ${brl(n*u)}`,'')}
   const env={retirada:'Retirada no box 63',excursao:'Excursão'+(o.exc?` (${o.exc})`:''),transp:'Transportadora',combinar:'A combinar'}[o.envio];
   const pag={pix:'PIX (me envie a chave, por favor)',dinheiro:'dinheiro na retirada',whats:'combinar pelo WhatsApp'}[o.pag];
@@ -626,7 +613,7 @@ const SLIDES=[
   {imgs:['343ff5cd716b936b57510fbc195942ba','fcb2ddc0115c6ecc896f7f113b9c10dc'],tone:'#ECE4DA',eb:'Lançamentos',h:'Acabou de chegar.',p:'Vestido Amélia e mais 4 novidades, tudo 100% forrado.',cta:'Ver lançamentos',act:'data-go="lanc"'},
   {imgs:['b5490cffd57a4c667aa9828fb6f8d079','e355cad9fed95054349ca3cc63ea5f4e'],tone:'#E6E3DD',eb:'Bodys',h:'Body a R$ 30 no atacado.',p:'9 modelos em até 10 cores, com forro duplo na poliamida premium.',cta:'Ver bodys',act:'data-cat="Bodys"'},
   {imgs:['20888f3448c4e626eb88d32838fc1c43','a48acd47628eaa49635bb8781287e52a'],tone:'#E9E6E2',eb:'Vestido Maya · REF 06',h:'Um modelo, onze cores.',p:'Do off white ao bordô, com estoque separado por cor.',cta:'Ver o Vestido Maya',act:'data-open="p27"'},
-  {imgs:['017c4fc933f09feb93543e16f5592169','06745397c637fadbb45dd80dc1adbd6f'],dark:true,eb:'Vestido Antonella · REF 14',h:'Estoque para montar grade.',p:'55 peças prontas em 6 cores. Com 12 peças, o preço por peça cai.',cta:'Montar minha grade',act:'data-open="p19"'},
+  {imgs:['017c4fc933f09feb93543e16f5592169','06745397c637fadbb45dd80dc1adbd6f'],dark:true,eb:'Vestido Antonella · REF 14',h:'Estoque para montar grade.',p:'55 peças prontas em 6 cores, com estoque separado por cor.',cta:'Montar minha grade',act:'data-open="p19"'},
   {imgs:['882fe6664079602b2bc6bfed678ac4aa','b1922f34259296d5ffcc1f7fdd486807'],tone:'#EDE3DC',eb:'Promoção',h:'Últimas peças com 10% off.',p:'Vestidos Laís, Rubra e Zara por R$ 49,50 a peça.',cta:'Ver promoções',act:'data-cat="Promoções"'}
 ];
 const slider=$('#slider'), slidesEl=$('#slides'), dotsEl=$('#dots');
