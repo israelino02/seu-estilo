@@ -70,7 +70,47 @@ input{font:inherit;color:inherit}
 
 /* hero */
 .hero{padding-block:22px 0}
-.hero-img{display:block;width:100%;height:auto;aspect-ratio:2.43/1;object-fit:cover;background:var(--soft)}
+.slider{position:relative;touch-action:pan-y}
+.slides{position:relative;aspect-ratio:2.43/1;overflow:hidden;background:var(--soft)}
+.slide{position:absolute;inset:0;display:grid;grid-template-columns:44% 56%;background:var(--tone,#ECE5DC);color:var(--ink);opacity:0;visibility:hidden;transition:opacity .9s ease,visibility 0s linear .9s}
+.slide.on{opacity:1;visibility:visible;transition:opacity .9s ease}
+.s-media{order:2;display:flex;height:100%;overflow:hidden}
+.s-media img{display:block;flex:1 1 0;min-width:0;height:100%;object-fit:cover;object-position:center 22%}
+.slide.on .s-media img{animation:kb 7s ease-out both}
+@keyframes kb{from{transform:scale(1.06)}to{transform:scale(1)}}
+.s-txt{order:1;align-self:center;display:grid;gap:14px;justify-items:start;padding-inline:72px clamp(20px,3vw,44px)}
+.s-txt h2{font-family:var(--display);font-size:clamp(28px,3.4vw,50px);line-height:1.02;font-weight:500}
+.s-p{color:var(--muted);font-weight:300;font-size:16px;max-width:34ch}
+.slide.dark{--tone:#231D1A;color:#F3EEE8}
+.slide.dark .s-p,.slide.dark .eyebrow{color:#C9C0B7}
+.slide.dark .s-cta{background:#F3EEE8;color:#231D1A;border-color:#F3EEE8}
+.slide.banner{display:block}
+.slide.banner .s-media img{width:100%;aspect-ratio:auto}
+.slide.banner .s-txt{display:none}
+.sl-nav{position:absolute;top:calc((100% - 32px) / 2 - 22px);width:44px;height:44px;border-radius:50%;background:var(--surface);box-shadow:0 4px 18px rgba(0,0,0,.14);display:none;place-items:center;z-index:2;opacity:0;transition:opacity .25s}
+.sl-nav svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.6}
+.sl-nav.prev{left:14px}.sl-nav.next{right:14px}
+@media(hover:hover) and (min-width:760px){.sl-nav{display:grid}.slider:hover .sl-nav,.sl-nav:focus-visible{opacity:1}}
+.sl-dots{display:flex;justify-content:center;gap:6px;padding-top:12px}
+.sl-dots button{position:relative;width:34px;height:20px}
+.sl-dots button::before,.sl-dots i{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:var(--line)}
+.sl-dots i{background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.sl-dots .on i{animation:fill 6s linear forwards}
+@keyframes fill{to{transform:scaleX(1)}}
+@media(max-width:759px){
+  .slides{aspect-ratio:4/5}
+  .slide{display:block}
+  .s-media{position:absolute;inset:0}
+  .s-media img{width:100%;aspect-ratio:auto}
+  .s-media img+img{display:none}
+  .slide.banner .s-media img{object-position:90% center}
+  .s-txt,.slide.banner .s-txt{display:grid;position:absolute;left:0;right:0;bottom:0;max-width:none;gap:10px;padding:90px 20px 26px;background:linear-gradient(to top,rgba(15,10,8,.74),rgba(15,10,8,0));color:#fff}
+  .s-txt .eyebrow,.s-p,.slide.dark .s-p,.slide.dark .eyebrow{color:rgba(255,255,255,.85)}
+  .s-txt h2{font-size:32px}
+  .s-p{font-size:14.5px}
+  .s-cta,.slide.dark .s-cta{background:#fff;color:var(--ink);border-color:#fff;padding:12px 18px}
+}
+@media(prefers-reduced-motion:reduce){.slide.on .s-media img{animation:none}}
 .props{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:14px}
 @media(min-width:760px){.props{grid-template-columns:repeat(4,1fr)}}
 .props p{background:var(--surface);padding:14px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:center}
@@ -80,8 +120,19 @@ input{font:inherit;color:inherit}
 .sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
 .sec h2{font-family:var(--display);font-size:clamp(28px,4vw,40px);font-weight:500}
 .sec h2 em{font-style:italic;color:var(--accent);font-weight:400}
-.rail{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(160px,44vw,250px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-inline:max(var(--gut),calc((100% - 1180px)/2 + var(--gut)));padding-bottom:8px;scrollbar-width:thin}
-.rail>*{scroll-snap-align:start}
+.sec-h.center{justify-content:center;text-align:center}
+.rail-wrap{position:relative;--cw:clamp(160px,44vw,250px)}
+.rail{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:var(--cw);gap:14px;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;cursor:grab;user-select:none;-webkit-user-select:none}
+.rail::-webkit-scrollbar{display:none}
+.rail.drag{cursor:grabbing}
+.rail.drag .card{pointer-events:none}
+.rail a,.rail img{-webkit-user-drag:none}
+.rail-nav{position:absolute;top:calc(var(--cw) * 2 / 3 - 22px);width:44px;height:44px;border-radius:50%;background:var(--surface);box-shadow:0 4px 18px rgba(0,0,0,.14);display:none;place-items:center;z-index:2;opacity:0;transition:opacity .25s}
+.rail-nav svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.6}
+.rail-nav.prev{left:max(12px,calc((100% - 1180px)/2))}
+.rail-nav.next{right:max(12px,calc((100% - 1180px)/2))}
+@media(hover:hover) and (min-width:760px){.rail-nav{display:grid}.rail-wrap:hover .rail-nav,.rail-nav:focus-visible{opacity:1}}
+.center-cta{display:flex;justify-content:center;margin-top:26px}
 
 /* catalog */
 .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:26px;scrollbar-width:none}
@@ -262,13 +313,23 @@ input{font:inherit;color:inherit}
 
 <div id="home">
   <section class="wrap hero">
-    <img class="hero-img" src="https://cdn.vendizap.com/vendizap-banners/588eab26c93923fb15b4deaf9935ba8f.webp" alt="Peças que vendem. Qualidade que fideliza. Poliamida premium, forro duplo, caimento impecável." referrerpolicy="no-referrer">
+    <div class="slider" id="slider" aria-roledescription="carrossel" aria-label="Destaques da loja">
+      <div class="slides" id="slides"></div>
+      <button class="sl-nav prev" data-slide="-1" aria-label="Destaque anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="sl-nav next" data-slide="1" aria-label="Próximo destaque"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="sl-dots" id="dots"></div>
+    </div>
     <div class="props"><p>Poliamida premium</p><p>Forro duplo</p><p>100% forrado</p><p>Mínimo R$ 250</p></div>
   </section>
 
   <section class="sec" id="lanc">
-    <div class="wrap sec-h"><h2>Acabou de <em>chegar</em></h2><button class="lnk" data-go="cat">Ver todos</button></div>
-    <div class="rail" id="rail"></div>
+    <div class="wrap sec-h center"><h2>Acabou de <em>chegar</em></h2></div>
+    <div class="rail-wrap">
+      <div class="rail" id="rail" aria-label="Lançamentos"></div>
+      <button class="rail-nav prev" data-rail="-1" aria-label="Ver anteriores"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="rail-nav next" data-rail="1" aria-label="Ver próximos"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="wrap center-cta"><button class="lnk" data-go="cat">Ver todos os modelos</button></div>
   </section>
 
   <section class="sec" id="cat">
@@ -389,7 +450,6 @@ function card(p){
 }
 
 function renderHome(){
-  $('#rail').innerHTML=PRODUCTS.filter(p=>p.novo).map(card).join('');
   $('#tabs').innerHTML=CATS.map(c=>`<button class="tab" role="tab" aria-selected="${c===tab}" data-tab="${c}">${c}</button>`).join('');
   const qq=q.trim().toLowerCase();
   const list=PRODUCTS.filter(p=>(tab==='Todos'||(tab==='Promoções'?p.promo:p.cat===tab))&&(!qq||p.name.toLowerCase().includes(qq)||p.ref.includes(qq)));
@@ -404,6 +464,7 @@ function openProduct(id){
 }
 function goHome(target){
   $('#prod').hidden=true; $('#home').hidden=false; cur=null;
+  if(railStale){railStale=false;buildRail()}
   if(target){const el=document.getElementById(target); if(el) el.scrollIntoView({behavior:'smooth'})} else window.scrollTo(0,0);
 }
 function tiersHtml(p,pcs){
@@ -532,6 +593,88 @@ function afterDone(){
 function openDrawer(){renderDrawer();$('#drawer').hidden=false;$('#scrim').hidden=false;document.body.style.overflow='hidden';$('#closeDr').focus()}
 function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true;document.body.style.overflow=''}
 
+const SLIDES=[
+  {banner:'https://cdn.vendizap.com/vendizap-banners/588eab26c93923fb15b4deaf9935ba8f.webp',eb:'Seu Estilo Premium',h:'Peças que vendem. Qualidade que fideliza.',p:'Poliamida premium, forro duplo e caimento impecável.',cta:'Ver catálogo',act:'data-go="cat"'},
+  {imgs:['343ff5cd716b936b57510fbc195942ba','7137f61d12d9f559dbce41b7f0e3f0d8'],tone:'#ECE4DA',eb:'Lançamentos',h:'Acabou de chegar.',p:'Vestidos Maysa, Marvi, Sabrina e Amélia, e o Body Liz. Tudo 100% forrado.',cta:'Ver lançamentos',act:'data-go="lanc"'},
+  {imgs:['b5490cffd57a4c667aa9828fb6f8d079','e355cad9fed95054349ca3cc63ea5f4e'],tone:'#E6E3DD',eb:'Bodys',h:'Body a R$ 30 no atacado.',p:'9 modelos em até 10 cores, com forro duplo na poliamida premium.',cta:'Ver bodys',act:'data-cat="Bodys"'},
+  {imgs:['20888f3448c4e626eb88d32838fc1c43','a48acd47628eaa49635bb8781287e52a'],tone:'#E9E6E2',eb:'Vestido Maya · REF 06',h:'Um modelo, onze cores.',p:'Do off white ao bordô, com estoque separado por cor.',cta:'Ver o Vestido Maya',act:'data-open="p27"'},
+  {imgs:['017c4fc933f09feb93543e16f5592169','06745397c637fadbb45dd80dc1adbd6f'],dark:true,eb:'Vestido Antonella · REF 14',h:'Estoque para montar grade.',p:'55 peças prontas em 6 cores. Com 12 peças, o preço por peça cai.',cta:'Montar minha grade',act:'data-open="p19"'},
+  {imgs:['882fe6664079602b2bc6bfed678ac4aa','b1922f34259296d5ffcc1f7fdd486807'],tone:'#EDE3DC',eb:'Promoção',h:'Últimas peças com 10% off.',p:'Vestidos Laís, Rubra e Zara por R$ 49,50 a peça.',cta:'Ver promoções',act:'data-cat="Promoções"'}
+];
+const slider=$('#slider'), slidesEl=$('#slides'), dotsEl=$('#dots');
+let slideI=0, slideT=0, swX=null;
+function buildSlides(){
+  slidesEl.innerHTML=SLIDES.map((s,i)=>`<div class="slide${s.banner?' banner':''}${s.dark?' dark':''}" ${s.tone?`style="--tone:${s.tone}"`:''} role="group" aria-roledescription="slide" aria-label="${i+1} de ${SLIDES.length}">
+    <div class="s-media">${s.banner?`<img src="${s.banner}" alt="${esc(s.h)}" referrerpolicy="no-referrer">`:s.imgs.map(h=>`<img src="${IMG+h}.webp" alt="" referrerpolicy="no-referrer">`).join('')}</div>
+    <div class="s-txt"><p class="eyebrow">${s.eb}</p><h2>${s.h}</h2><p class="s-p">${s.p}</p><button class="btn s-cta" ${s.act}>${s.cta}</button></div></div>`).join('');
+  dotsEl.innerHTML=SLIDES.map((_,i)=>`<button data-dot="${i}" aria-label="Destaque ${i+1}"><i></i></button>`).join('');
+  showSlide(0);
+}
+function showSlide(i){
+  slideI=(i+SLIDES.length)%SLIDES.length;
+  [...slidesEl.children].forEach((el,k)=>{const on=k===slideI;el.classList.toggle('on',on);el.inert=!on;el.setAttribute('aria-hidden',!on)});
+  [...dotsEl.children].forEach((d,k)=>{d.classList.remove('on');d.removeAttribute('aria-current');if(k===slideI){void d.offsetWidth;d.classList.add('on');d.setAttribute('aria-current','true')}});
+  clearTimeout(slideT);
+  slideT=setTimeout(()=>showSlide(slideI+1),6000);
+}
+slider.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')swX=e.clientX});
+slider.addEventListener('pointerup',e=>{if(swX===null)return;const dx=e.clientX-swX;swX=null;if(Math.abs(dx)>40)showSlide(slideI+(dx<0?1:-1))});
+slider.addEventListener('pointercancel',()=>{swX=null});
+
+// Carrossel infinito: 5 cópias do conjunto; ao parar de rolar, volta em silêncio para a cópia do meio
+const rail=$('#rail'), COPIES=5, reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let railSet=0, railStep=0, railStale=false, railW=0, railT=0;
+let drag=false, moved=false, sx=0, sl=0, lastX=0, lastT=0, vel=0, inertia=0;
+function buildRail(){
+  const base=PRODUCTS.filter(p=>p.novo);
+  rail.innerHTML=card(base[0])+card(base[0]);
+  railStep=rail.children[1].offsetLeft-rail.children[0].offsetLeft;
+  const reps=Math.max(1,Math.ceil(rail.clientWidth/(railStep*base.length)));
+  const set=Array.from({length:reps},()=>base).flat();
+  const html=set.map(card).join(''), clone=html.replace(/<a class="card"/g,'<a class="card" aria-hidden="true" tabindex="-1"');
+  rail.innerHTML=Array.from({length:COPIES},(_,i)=>i===2?html:clone).join('');
+  railSet=rail.children[set.length].offsetLeft-rail.children[0].offsetLeft;
+  const first=rail.children[set.length*2];
+  rail.scrollLeft=first.offsetLeft-(rail.clientWidth-first.offsetWidth)/2;
+  railW=innerWidth;
+}
+function railFix(){
+  const x=rail.scrollLeft; let d=0;
+  if(x<railSet*1.5) d=railSet; else if(x>railSet*2.5) d=-railSet;
+  if(d) rail.scrollLeft=x+d;
+  return d;
+}
+rail.addEventListener('scroll',()=>{
+  if(drag||inertia) return;
+  const x=rail.scrollLeft; if(x<railSet*.5||x>railSet*3.5) railFix();
+  clearTimeout(railT); railT=setTimeout(railFix,120);
+},{passive:true});
+rail.addEventListener('pointerdown',e=>{
+  if(e.pointerType!=='mouse'||e.button!==0) return;
+  cancelAnimationFrame(inertia); inertia=0;
+  drag=true; moved=false; sx=lastX=e.clientX; sl=rail.scrollLeft; lastT=performance.now(); vel=0;
+});
+addEventListener('pointermove',e=>{
+  if(!drag) return;
+  const dx=e.clientX-sx;
+  if(!moved&&Math.abs(dx)>5){moved=true;rail.classList.add('drag')}
+  if(!moved) return;
+  rail.scrollLeft=sl-dx; sl+=railFix();
+  const now=performance.now(); vel=(e.clientX-lastX)/Math.max(1,now-lastT); lastX=e.clientX; lastT=now;
+});
+addEventListener('pointerup',()=>{
+  if(!drag) return;
+  drag=false; rail.classList.remove('drag');
+  let v=-vel*16;
+  if(reduceMotion||Math.abs(v)<1||performance.now()-lastT>80){railFix();return}
+  const step=()=>{ if(Math.abs(v)<.4){inertia=0;railFix();return} rail.scrollLeft+=v; railFix(); v*=.95; inertia=requestAnimationFrame(step) };
+  inertia=requestAnimationFrame(step);
+});
+rail.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopPropagation();moved=false}},true);
+rail.addEventListener('dragstart',e=>e.preventDefault());
+let resizeT=0;
+addEventListener('resize',()=>{clearTimeout(resizeT);resizeT=setTimeout(()=>{if(innerWidth===railW)return;if($('#home').hidden)railStale=true;else buildRail()},200)});
+
 let tt; function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,2400)}
 function toggleSearch(){const r=$('#searchRow');r.hidden=!r.hidden;if(!r.hidden){if(cur)goHome();$('#q').focus()}}
 
@@ -543,6 +686,10 @@ document.addEventListener('click',e=>{
   if(t.dataset.go){if('close' in t.dataset)closeDrawer();goHome(t.dataset.go);return}
   if('back' in t.dataset){goHome('cat');return}
   if(t.dataset.tab){tab=t.dataset.tab;renderHome();return}
+  if(t.dataset.slide){showSlide(slideI+ +t.dataset.slide);return}
+  if(t.dataset.dot){showSlide(+t.dataset.dot);return}
+  if(t.dataset.cat){tab=t.dataset.cat;renderHome();goHome('cat');return}
+  if(t.dataset.rail){railFix();rail.scrollBy({left:railStep*+t.dataset.rail,behavior:reduceMotion?'auto':'smooth'});return}
   if(t.dataset.img){selImg=+t.dataset.img;const p=byId(cur),g=$('#galMain');g.style.backgroundImage=`url(${TH+p.imgs[selImg]})`;g.innerHTML=img(IMG+p.imgs[selImg],p.name,'',false);document.querySelectorAll('.th').forEach(b=>b.classList.toggle('on',+b.dataset.img===selImg));return}
   if('sort' in t.dataset){byId(cur).colors.forEach((c,i)=>{if(c.st>0)setQty(i,(draft[i]||0)+1)});syncSteps();updSum();return}
   if(t.dataset.inc||t.dataset.dec){const i=+(t.dataset.inc||t.dataset.dec);setQty(i,(draft[i]||0)+(t.dataset.inc?1:-1));syncSteps();updSum();return}
@@ -586,6 +733,8 @@ $('#sw').innerHTML=ACCENTS.map(([n,h],i)=>`<button role="radio" aria-checked="${
 let ai=0; const annP=$('#annTxt');
 setInterval(()=>{annP.style.opacity=0;setTimeout(()=>{ai=(ai+1)%ANN.length;annP.textContent=ANN[ai];annP.style.opacity=1},350)},3800);
 renderHome();
+buildSlides();
+buildRail();
 </script>
 </body>
 </html>
