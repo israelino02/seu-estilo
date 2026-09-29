@@ -170,9 +170,22 @@ input{font:inherit;color:inherit}
 
 /* footer */
 .ftr{border-top:1px solid var(--line);margin-top:48px;padding-block:40px 32px;font-size:13.5px;color:var(--muted);background:var(--surface)}
-.ftr-g{display:grid;gap:24px}
-@media(min-width:760px){.ftr-g{grid-template-columns:1.3fr 1fr 1fr 1fr}}
-.ftr h4{margin:0 0 8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:500}
+.ftr-g{display:grid;gap:32px}
+@media(min-width:760px){.ftr-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1040px){.ftr-g{grid-template-columns:1.1fr 1.2fr 1fr 1fr}}
+.ftr-col{display:grid;gap:10px;align-content:start}
+.ftr h4{margin:0;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:500}
+.ftr h4:not(:first-child){margin-top:14px}
+.ftr-l{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ftr-l a,.ig{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;overflow-wrap:anywhere}
+.ftr-l a:hover,.ig:hover{color:var(--accent)}
+.ftr-l svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ftr-l svg.fill{fill:currentColor;stroke:none}
+.pays{display:flex;flex-wrap:wrap;gap:8px}
+.pay{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper);padding:8px 12px;color:var(--ink);font-size:13px}
+.pay svg{width:22px;height:22px}
+.ig-ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%)}
+.ig-ic svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.8}
 .ftr-b{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);font-size:12px}
 
 /* product */
@@ -265,10 +278,6 @@ input{font:inherit;color:inherit}
 .bubble{background:#E3F1DA;color:#1E2A1B;padding:14px 16px;border-radius:12px 12px 12px 2px;max-width:100%;overflow-x:auto}
 .bubble pre{margin:0;font-family:var(--sans);font-size:13.5px;white-space:pre-wrap;line-height:1.5}
 .note{font-size:12.5px;color:var(--muted)}
-.pix{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--line);padding:16px}
-@media(max-width:420px){.pix{grid-template-columns:1fr}}
-.pix canvas{width:150px;height:150px;image-rendering:pixelated}
-.pix code{display:block;font-size:11.5px;word-break:break-all;background:var(--soft);padding:8px;margin-block:8px}
 
 
 /* bottom nav */
@@ -346,12 +355,38 @@ input{font:inherit;color:inherit}
 <footer class="ftr">
   <div class="wrap">
     <div class="ftr-g">
-      <div><h4>Seu Estilo Premium</h4><p style="max-width:34ch">Bodys e vestidos no atacado. Peças 100% forradas na poliamida premium.</p></div>
-      <div><h4>Box</h4><p>Moda Center, Setor Azul, Rua O, Box 63</p><p>Santa Cruz do Capibaribe · PE</p></div>
-      <div><h4>Envio</h4><p>Excursão, transportadora ou retirada no box</p></div>
-      <div><h4>Pagamento</h4><p>PIX, ou dinheiro na retirada</p></div>
+      <div class="ftr-col">
+        <h4>Seu Estilo Premium</h4>
+        <p style="max-width:34ch">Bodys e vestidos no atacado. Peças 100% forradas na poliamida premium.</p>
+        <p>Moda Center, Setor Azul, Rua O, Box 63<br>Santa Cruz do Capibaribe · PE</p>
+      </div>
+      <div class="ftr-col">
+        <h4>Fale com o vendedor</h4>
+        <ul class="ftr-l">
+          <li><a href="https://wa.me/5581995639402" data-wa="Olá! Vim pelo site da Seu Estilo Premium e quero tirar uma dúvida." target="_blank" rel="noopener"><svg class="fill" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3.3 4.4c-.2 0-.5 0-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.7.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3l-1.9-.9c-.3-.1-.5-.1-.7.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.8-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5h-.5z"/></svg>Seu Estilo Premium</a></li>
+        </ul>
+        <h4>Atendimento ao cliente</h4>
+        <ul class="ftr-l">
+          <li><a href="tel:+5581995639402"><svg viewBox="0 0 24 24"><path d="M5 4h3.5l2 5-2.4 1.5a11 11 0 0 0 5.4 5.4L15 13.5l5 2V19a2 2 0 0 1-2.2 2A17 17 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></svg>(81) 99563-9402</a></li>
+          <li><a href="mailto:viniciusferreira376@gmail.com"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg>viniciusferreira376@gmail.com</a></li>
+          <li><a href="https://wa.me/5581995639402" data-wa="Olá! Quero fazer uma reclamação sobre um pedido." target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5"/><path d="M12 16.2v.3"/></svg>Reclamações</a></li>
+        </ul>
+      </div>
+      <div class="ftr-col">
+        <h4>Formas de pagamento aceitas</h4>
+        <div class="pays">
+          <span class="pay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l4.2 4.2-4.2 4.2-4.2-4.2zM12 13.1l4.2 4.2-4.2 4.2-4.2-4.2zM2.5 12l4.2-4.2 4.2 4.2-4.2 4.2zM13.1 12l4.2-4.2 4.2 4.2-4.2 4.2z" fill="#32BCAD"/></svg>PIX</span>
+          <span class="pay"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="1.5" fill="none" stroke="#2F7A3A" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" fill="#2F7A3A"/></svg>Dinheiro</span>
+        </div>
+        <h4>Envio</h4>
+        <p>Excursão, transportadora ou retirada no box</p>
+      </div>
+      <div class="ftr-col">
+        <h4>Nos siga nas redes sociais</h4>
+        <a class="ig" href="https://www.instagram.com/seuestilomodasscc" target="_blank" rel="noopener"><span class="ig-ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.9" cy="7.1" r=".9" fill="#fff" stroke="none"/></svg></span>@seuestilomodasscc</a>
+      </div>
     </div>
-    <p class="ftr-b">Protótipo feito com Loja de Atacado IL. Fotos, nomes, preços e estoque vêm do catálogo atual da loja.</p>
+    <p class="ftr-b">© 2026 Seu Estilo Premium · Protótipo feito com Loja de Atacado IL</p>
   </div>
 </footer>
 
@@ -427,7 +462,9 @@ const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const img=(src,alt,cls='',lazy=true)=>`<img ${cls?`class="${cls}"`:''} src="${src}" alt="${esc(alt)}" ${lazy?'loading="lazy"':''} referrerpolicy="no-referrer">`;
 const avail=p=>p.colors.filter(c=>c.st>0);
 
-let cart={}, cur=null, draft={}, selImg=0, tab='Todos', q='', orderNo=1042;
+let cart={}, cur=null, draft={}, selImg=0, tab='Todos', q='';
+const WA='5581995639402';
+const waLink=text=>`https://wa.me/${WA}?text=${encodeURIComponent(text)}`;
 let form={nome:'',zap:'',cid:'',envio:'excursao',exc:'',pag:'whats'}, done=null, triedSubmit=false;
 
 const piecesOf=d=>d?Object.values(d).reduce((a,n)=>a+n,0):0;
@@ -554,42 +591,33 @@ function renderDrawer(){
       <fieldset class="fs"><legend>Envio</legend>${envio.map(([v,t,s])=>`<label class="opt"><input type="radio" name="envio" value="${v}" ${form.envio===v?'checked':''}><span>${t}<small>${s}</small></span></label>`).join('')}
         <div class="fld" id="excBox" ${form.envio==='excursao'?'':'hidden'}><label for="fExc">Nome da excursão</label><input id="fExc" value="${esc(form.exc)}" placeholder="Ex.: Excursão do Galego"></div></fieldset>
       <fieldset class="fs"><legend>Pagamento</legend>
-        <label class="opt"><input type="radio" name="pag" value="whats" ${form.pag==='whats'?'checked':''}><span>Combinar pelo WhatsApp<small>A loja confirma estoque e envia o valor final</small></span></label>
-        <label class="opt"><input type="radio" name="pag" value="pix" ${form.pag==='pix'?'checked':''}><span>PIX agora<small>Gera o QR com o valor do pedido</small></span></label></fieldset>
+        <label class="opt"><input type="radio" name="pag" value="pix" ${form.pag==='pix'?'checked':''}><span>PIX<small>A loja confirma o estoque e envia a chave PIX pelo WhatsApp</small></span></label>
+        <label class="opt"><input type="radio" name="pag" value="dinheiro" ${form.pag==='dinheiro'?'checked':''}><span>Dinheiro na retirada<small>Para quem retira no box 63</small></span></label>
+        <label class="opt"><input type="radio" name="pag" value="whats" ${form.pag==='whats'?'checked':''}><span>Combinar pelo WhatsApp<small>A loja confirma estoque, frete e valor final</small></span></label></fieldset>
       <div class="tot"><div class="sum-row"><span>${pcs} peças</span><b class="num">${brl(val)}</b></div><p class="note">Frete conforme a forma de envio.</p></div>
       <p class="err" id="ckErr" ${triedSubmit&&(!form.nome.trim()||!form.zap.trim())?'':'hidden'}>Preencha seu nome e WhatsApp para registrar o pedido.</p>
-      <button class="btn block" type="submit" ${ok?'':'disabled'}>${form.pag==='pix'?'Registrar pedido e gerar PIX':'Registrar pedido e abrir WhatsApp'}</button>
+      <button class="btn block" type="submit" ${ok?'':'disabled'}>Enviar pedido pelo WhatsApp</button>
     </form>`;
 }
 function msgText(o){
-  const L=[`*Pedido #${o.no} · ${STORE}*`,`Cliente: ${o.nome}${o.cid?' · '+o.cid:''}`,`WhatsApp: ${o.zap}`,''];
+  const L=['Olá! Quero fazer este pedido pelo site:','',`*Pedido #${o.no} · ${STORE}*`,`Cliente: ${o.nome}${o.cid?' · '+o.cid:''}`,`WhatsApp: ${o.zap}`,''];
   for(const id in o.cart){const p=byId(id),d=o.cart[id],n=piecesOf(d),u=unit(p,n);
     L.push(`REF ${p.ref} · ${p.name}`,`   ${colorLine(p,d)}`,`   ${n} pç × ${brl(u)} = ${brl(n*u)}`,'')}
   const env={retirada:'Retirada no box 63',excursao:'Excursão'+(o.exc?` (${o.exc})`:''),transp:'Transportadora',combinar:'A combinar'}[o.envio];
-  L.push(`*Total: ${o.pcs} peças · ${brl(o.val)}*`,`Envio: ${env}`,`Pagamento: ${o.pag==='pix'?'PIX (gerado no site)':'combinar pelo WhatsApp'}`);
+  const pag={pix:'PIX (me envie a chave, por favor)',dinheiro:'dinheiro na retirada',whats:'combinar pelo WhatsApp'}[o.pag];
+  L.push(`*Total: ${o.pcs} peças · ${brl(o.val)}*`,`Envio: ${env}`,`Pagamento: ${pag}`);
   return L.join('\n');
 }
 function doneHtml(){
   const o=done;
-  const pix=o.pag==='pix'?`<div class="pix"><canvas id="qr" width="175" height="175" aria-label="QR de exemplo"></canvas><div><p class="lbl">PIX de ${brl(o.val)}</p><p class="note" style="margin-top:6px">Aponte a câmera do app do banco ou use o copia e cola.</p><code>00020126580014BR.GOV.BCB.PIX0136-EXEMPLO-PEDIDO-${o.no}5204000053039865802BR6304ABCD</code><p class="note">QR de exemplo, não é um pagamento real. Com o Asaas, a baixa é automática. Com PIX manual, a loja confere e marca como pago.</p></div></div>`:'';
-  return `<div class="ok-v"><p class="eyebrow">Pedido registrado</p><h3 class="num">#${o.no}</h3>
-    <p>O pedido já aparece no painel da loja com status <b>${o.pag==='pix'?'Aguardando pagamento':'Novo'}</b>, junto com os dados da cliente. O estoque de cada cor é reservado.</p>
-    ${pix}
-    <p class="lbl">${o.pag==='pix'?'Resumo enviado para a loja':'Mensagem que abre no WhatsApp da loja'}</p>
+  return `<div class="ok-v"><p class="eyebrow">Pedido montado</p><h3 class="num">#${o.no}</h3>
+    <p>${o.opened?'Abrimos o WhatsApp da loja com o seu pedido. Toque em enviar':'Toque no botão abaixo para enviar o pedido no WhatsApp da loja'}. A loja confirma o estoque, o frete e ${o.pag==='pix'?'manda a chave PIX':'o pagamento'}.</p>
+    <a class="btn block" href="${waLink(msgText(o))}" target="_blank" rel="noopener">${o.opened?'Abrir o WhatsApp de novo':'Enviar pedido no WhatsApp'}</a>
+    <p class="lbl">Resumo do pedido</p>
     <div class="bubble"><pre id="msg"></pre></div>
-    <p class="note">No sistema real, o WhatsApp abre com essa mensagem pronta. Aqui aparece só a prévia.</p>
     <button class="btn ghost" id="again">Fazer outro pedido</button></div>`;
 }
-function afterDone(){
-  $('#msg').textContent=msgText(done);
-  const cv=$('#qr'); if(!cv) return;
-  const x=cv.getContext('2d'),n=25,s=cv.width/n; let seed=done.no;
-  const r=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
-  x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#1F1A17';
-  for(let i=0;i<n;i++)for(let j=0;j<n;j++) if(r()>.52) x.fillRect(i*s,j*s,s,s);
-  const f=(a,b)=>{x.fillStyle='#fff';x.fillRect((a-1)*s,(b-1)*s,9*s,9*s);x.fillStyle='#1F1A17';x.fillRect(a*s,b*s,7*s,7*s);x.fillStyle='#fff';x.fillRect((a+1)*s,(b+1)*s,5*s,5*s);x.fillStyle='#1F1A17';x.fillRect((a+2)*s,(b+2)*s,3*s,3*s)};
-  f(0,0);f(n-7,0);f(0,n-7);
-}
+function afterDone(){ $('#msg').textContent=msgText(done) }
 function openDrawer(){renderDrawer();$('#drawer').hidden=false;$('#scrim').hidden=false;document.body.style.overflow='hidden';$('#closeDr').focus()}
 function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true;document.body.style.overflow=''}
 
@@ -680,7 +708,7 @@ function toggleSearch(){const r=$('#searchRow');r.hidden=!r.hidden;if(!r.hidden)
 
 document.addEventListener('click',e=>{
   const t=e.target.closest('button,a'); if(!t) return;
-  if(t.matches('a')) e.preventDefault();
+  if(t.matches('a[href="#"]')) e.preventDefault();
   if(t.dataset.open){closeDrawer();openProduct(t.dataset.open);return}
   if('home' in t.dataset||t.id==='logo'){closeDrawer();goHome();return}
   if(t.dataset.go){if('close' in t.dataset)closeDrawer();goHome(t.dataset.go);return}
@@ -724,7 +752,10 @@ document.addEventListener('submit',e=>{
     triedSubmit=true;
     if(!form.nome.trim()||!form.zap.trim()){$('#ckErr').hidden=false;return}
     const {pcs,val}=totals(); if(val<MIN) return;
-    done={no:orderNo++,cart:JSON.parse(JSON.stringify(cart)),pcs,val,...form};
+    done={no:Date.now().toString(36).slice(-5).toUpperCase(),cart:JSON.parse(JSON.stringify(cart)),pcs,val,...form};
+    const w=window.open(waLink(msgText(done)),'_blank');
+    if(w) w.opener=null;
+    done.opened=!!w;
     cart={}; updBag(); renderDrawer(); $('#drBody').scrollTop=0;
   }
 });
@@ -732,6 +763,7 @@ document.addEventListener('submit',e=>{
 $('#sw').innerHTML=ACCENTS.map(([n,h],i)=>`<button role="radio" aria-checked="${i===0}" aria-label="${n}" title="${n}" data-accent="${h}" style="background:${h}"></button>`).join('');
 let ai=0; const annP=$('#annTxt');
 setInterval(()=>{annP.style.opacity=0;setTimeout(()=>{ai=(ai+1)%ANN.length;annP.textContent=ANN[ai];annP.style.opacity=1},350)},3800);
+document.querySelectorAll('[data-wa]').forEach(a=>{a.href=waLink(a.dataset.wa)});
 renderHome();
 buildSlides();
 buildRail();
