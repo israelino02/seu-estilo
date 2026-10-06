@@ -223,8 +223,7 @@ input{font:inherit;color:inherit}
 .grade thead th:last-child,.grade td:last-child{text-align:right}
 .grade tbody th{font-weight:400;white-space:nowrap}
 .grade tbody th .dot{margin-right:9px;vertical-align:-1px}
-.stk{font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
-.low{color:var(--warn);font-weight:500}
+.stk{font-size:12.5px;color:var(--muted);white-space:nowrap}
 .grade .off th,.grade .off td{color:#A39C95}
 .grade .off .dot{opacity:.45}
 .step{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--paper)}
@@ -481,9 +480,9 @@ function priceBox(p){
 }
 function gradeHtml(p){
   return `<div class="grade-h"><p class="lbl">Quantas peças de cada cor</p>${avail(p).length>1?'<button class="mini" data-sort>+1 de cada cor</button>':''}</div>
-  <div class="gwrap"><table class="grade"><thead><tr><th scope="col">Cor</th><th scope="col">Estoque</th><th scope="col">Quantidade</th></tr></thead><tbody>${p.colors.map((c,i)=>c.st===0
-    ?`<tr class="off"><th scope="row"><i class="dot" style="background:${c.hex}"></i>${c.n}</th><td class="stk">Esgotado</td><td></td></tr>`
-    :`<tr><th scope="row"><i class="dot" style="background:${c.hex}"></i>${c.n}</th><td class="stk">${c.st<=2?`<span class="low">Últimas ${c.st}</span>`:`${c.st} peças`}</td>
+  <div class="gwrap"><table class="grade"><thead><tr><th scope="col">Cor</th><th scope="col">Quantidade</th></tr></thead><tbody>${p.colors.map((c,i)=>c.st===0
+    ?`<tr class="off"><th scope="row"><i class="dot" style="background:${c.hex}"></i>${c.n}</th><td class="stk">Esgotado</td></tr>`
+    :`<tr><th scope="row"><i class="dot" style="background:${c.hex}"></i>${c.n}</th>
       <td><span class="step"><button data-dec="${i}" aria-label="Menos uma ${c.n}">−</button><input type="number" min="0" max="${c.st}" inputmode="numeric" id="q-${p.id}-${i}" data-i="${i}" value="${draft[i]||''}" placeholder="0" aria-label="Quantidade na cor ${c.n}"><button data-inc="${i}" aria-label="Mais uma ${c.n}">+</button></span></td></tr>`).join('')}</tbody></table></div>`;
 }
 function renderProduct(){
@@ -494,7 +493,7 @@ function renderProduct(){
       <div class="gal"><div class="gal-main" id="galMain" style="background:var(--soft) url(${TH(p.imgs[selImg])}) center/cover">${img(FULL(p.imgs[selImg]),p.name,'',false)}</div>
         <div class="gal-th">${p.imgs.map((h,k)=>`<button class="th ${k===selImg?'on':''}" data-img="${k}" aria-label="Foto ${k+1}">${img(TH(h),'')}</button>`).join('')}</div></div>
       <div class="info">
-        <div style="display:grid;gap:10px"><p class="ref">REF ${p.ref} · ${p.cat}${p.novo?' · Lançamento':''}</p><h1 class="pd-t">${esc(p.name)}</h1><p class="desc">Peça 100% forrada na poliamida premium. ${p.colors.length} ${p.colors.length===1?'cor disponível':'cores no catálogo'}, estoque atualizado por cor.</p></div>
+        <div style="display:grid;gap:10px"><p class="ref">REF ${p.ref} · ${p.cat}${p.novo?' · Lançamento':''}</p><h1 class="pd-t">${esc(p.name)}</h1><p class="desc">Peça 100% forrada na poliamida premium. ${p.colors.length} ${p.colors.length===1?'cor disponível':'cores no catálogo'}.</p></div>
         ${priceBox(p)}
         ${sold?'<p class="hint neutral">Modelo esgotado em todas as cores. Volta na próxima produção.</p>':`<div style="display:grid;gap:10px">${gradeHtml(p)}</div><div class="sum" id="sum"></div>`}
         <div class="facts"><p>Pedido mínimo da loja: ${brl(MIN)}, somando modelos diferentes.</p><p>Envio por excursão, transportadora ou retirada no box 63 do Moda Center.</p></div>
