@@ -95,7 +95,7 @@ input{font:inherit;color:inherit}
 .sl-dots button{position:relative;width:34px;height:20px}
 .sl-dots button::before,.sl-dots i{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:var(--line)}
 .sl-dots i{background:var(--accent);transform-origin:left;transform:scaleX(0)}
-.sl-dots .on i{animation:fill 6s linear forwards}
+.sl-dots .on i{animation:fill var(--slide-ms,4200ms) linear forwards}
 @keyframes fill{to{transform:scaleX(1)}}
 @media(max-width:759px){
   .slides{aspect-ratio:4/5}
@@ -593,6 +593,8 @@ const SLIDES=[
   {imgs:['882fe6664079602b2bc6bfed678ac4aa','b1922f34259296d5ffcc1f7fdd486807'],tone:'#EDE3DC',eb:'Promoção',h:'Últimas peças com 10% off.',p:'Vestidos Laís, Rubra e Zara por R$ 49,50 a peça.',cta:'Ver promoções',act:'data-cat="Promoções"'}
 ];
 const slider=$('#slider'), slidesEl=$('#slides'), dotsEl=$('#dots');
+const SLIDE_MS=4200; // 6000ms original, 30% mais rápido
+slider.style.setProperty('--slide-ms',SLIDE_MS+'ms');
 let slideI=0, slideT=0, swX=null;
 function buildSlides(){
   slidesEl.innerHTML=SLIDES.map((s,i)=>`<div class="slide${s.banner?' banner':''}${s.dark?' dark':''}" ${s.tone?`style="--tone:${s.tone}"`:''} role="group" aria-roledescription="slide" aria-label="${i+1} de ${SLIDES.length}">
@@ -606,7 +608,7 @@ function showSlide(i){
   [...slidesEl.children].forEach((el,k)=>{const on=k===slideI;el.classList.toggle('on',on);el.inert=!on;el.setAttribute('aria-hidden',!on)});
   [...dotsEl.children].forEach((d,k)=>{d.classList.remove('on');d.removeAttribute('aria-current');if(k===slideI){void d.offsetWidth;d.classList.add('on');d.setAttribute('aria-current','true')}});
   clearTimeout(slideT);
-  slideT=setTimeout(()=>showSlide(slideI+1),6000);
+  slideT=setTimeout(()=>showSlide(slideI+1),SLIDE_MS);
 }
 slider.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')swX=e.clientX});
 slider.addEventListener('pointerup',e=>{if(swX===null)return;const dx=e.clientX-swX;swX=null;if(Math.abs(dx)>40)showSlide(slideI+(dx<0?1:-1))});
@@ -745,6 +747,18 @@ document.querySelectorAll('[data-wa]').forEach(a=>{a.href=waLink(a.dataset.wa)})
 renderHome();
 buildSlides();
 buildRail();
+
+// Alguns Safari de iPhone não iniciam uma animação de CSS que já estava na página no carregamento.
+// Força a reiniciar (tira e põe o estilo de volta) ao carregar e sempre que a aba volta a ficar visível.
+function kickMarquee(){
+  const t=$('.mq-track'); if(!t) return;
+  t.style.animation='none';
+  void t.offsetWidth;
+  t.style.animation='';
+}
+if(document.readyState==='complete') kickMarquee(); else addEventListener('load',kickMarquee);
+addEventListener('pageshow',kickMarquee);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) kickMarquee()});
 </script>
 </body>
 </html>
